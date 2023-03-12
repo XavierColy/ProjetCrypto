@@ -22,22 +22,12 @@ public class PublicParameter implements Serializable{
 	public static PairingParameters pairingParameters = PairingFactory.getPairingParameters("./src/main/resources/params/curves/a.properties");
     public static Pairing pairing = PairingFactory.getPairing(pairingParameters);
 	
-    // chargement des groupes cycliques Zr et G1
-    @SuppressWarnings("rawtypes")
-	public static Field fieldZr= pairing.getZr();
+    // chargement du groupe cyclique G1
 	@SuppressWarnings("rawtypes")
 	public static Field fieldG1= pairing.getG1();
-
-	
-	public void set_up(Element secretMasterKey) {
-		//choix aleatoire du generateur du groupe 
-		generator = fieldG1.newRandomElement();
-		//edition de la clé publique de l'autorité
-		publicKey = generator.duplicate().mulZn(secretMasterKey);
-	}
 	
 	//definition des fonctions de hachages
-	public Element hash1(byte[] id) {
+	public static Element hash1(byte[] id) {
 		/**
 		 * correspond a la premiere fonction de hachage H1
 		 * selon le schema cryptographique IBE de Boneh et Franklin
@@ -49,7 +39,7 @@ public class PublicParameter implements Serializable{
 		return fieldG1.newElement().setFromHash(id, 0, id.length);	
 	}
 		
-	public byte[] hash2(Element gt) {
+	public static byte[] hash2(Element gt) {
 		/**
 		 * correspond a la deuxieme fonction de hachage H2
 		 * selon le schema cryptographique IBE de Boneh et Franklin
