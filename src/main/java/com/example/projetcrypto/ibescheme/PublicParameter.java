@@ -2,12 +2,18 @@ package com.example.projetcrypto.ibescheme;
 
 import java.io.Serializable;
 import it.unisa.dia.gas.jpbc.Element;
-import it.unisa.dia.gas.jpbc.Field;
 import it.unisa.dia.gas.jpbc.Pairing;
-import it.unisa.dia.gas.jpbc.PairingParameters;
-import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
-
+/**
+ * Cette classe contient les parametres publiques comme decrit dans le schema IBE de Boneh et Franklin  
+ * 
+ * @param pairing Configuration de la courbe elliptique
+ * @param generator Generateur d'un groupe cyclique
+ * @param publicKey Clé publique du maitre, l'authorité de confiance
+ * 
+ * @author Giovanni
+ * 
+ */
 public class PublicParameter implements Serializable{
 
 	/**
@@ -15,38 +21,68 @@ public class PublicParameter implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	static Element generator;
-	static Element publicKey;
+	private byte[] generator;
+	private byte[] publicKey;
+	private Pairing pairing ;
 	
-	//chargement des parametres de configuration de la courbes elliptiques
-	public static PairingParameters pairingParameters = PairingFactory.getPairingParameters("./src/main/resources/params/curves/a.properties");
-    public static Pairing pairing = PairingFactory.getPairing(pairingParameters);
 	
-    // chargement du groupe cyclique G1
-	@SuppressWarnings("rawtypes")
-	public static Field fieldG1= pairing.getG1();
-	
-	//definition des fonctions de hachages
-	public static Element hash1(byte[] id) {
-		/**
-		 * correspond a la premiere fonction de hachage H1
-		 * selon le schema cryptographique IBE de Boneh et Franklin
-		 *  
-		 * @param id tableau de bytes
-		 * @return l'equivalent dans le groupe cyclique G1
-		 */
+	public PublicParameter(Pairing pairing ,Element generator, Element publicKey) {
+
+		this.pairing = pairing;
+		this.generator = generator.toBytes();
+		this.publicKey = publicKey.toBytes();
 		
-		return fieldG1.newElement().setFromHash(id, 0, id.length);	
+	}
+	
+	//getters, setters
+	public byte[] getGenerator() {
+		return generator;
+	}
+
+	public void setGenerator(Element generator) {
+		this.generator = generator.toBytes();
+	}
+
+	public byte[]  getPublicKey() {
+		return publicKey;
+	}
+
+	public void setPublicKey(Element publicKey) {
+		this.publicKey = publicKey.toBytes();
 	}
 		
+	public Pairing getPairing() {
+		return pairing;
+	}
+
+	//definition des fonctions de hachages
+	
+	/**
+	 * correspond a la premiere fonction de hachage H1
+	 * selon le schema cryptographique IBE de Boneh et Franklin
+	 * 
+	 * @param id Tableau de bytes correspondant à une identité
+	 * @param pairing
+	 * @return L'equivalent de @param id dans le groupe cyclique G1
+	 */
+	public static Element hash1(byte[] id,Pairing pairing) {
+		
+		/*Element Qid = pairing.getG1().newOneElement();
+		Qid.setFromHash(id, 0, id.length);
+		
+		return Qid;*/
+		return pairing.getG1().newElementFromBytes(id);
+	}
+	
+	/**
+	 * correspond a la deuxieme fonction de hachage H2
+	 * selon le schema cryptographique IBE de Boneh et Franklin
+	 * 
+	 * @param gt Element du groupe cyclique GT
+	 * @return L'equivalent en tableau de bytes
+	 */
 	public static byte[] hash2(Element gt) {
-		/**
-		 * correspond a la deuxieme fonction de hachage H2
-		 * selon le schema cryptographique IBE de Boneh et Franklin
-		 * 
-		 * @param gt element du groupe cyclique GT
-		 * @return l'equivalent en tableau de bytes
-		 */
+		
 		return gt.toBytes();
 	}
 		
