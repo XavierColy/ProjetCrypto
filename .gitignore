@@ -1,9 +1,11 @@
 target/
+.gitignore
 !.mvn/wrapper/maven-wrapper.jar
 .mvn
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+src/main/java/module-info.java
 ### IntelliJ IDEA ###
 .idea
 .idea/modules.xml

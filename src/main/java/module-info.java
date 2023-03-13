@@ -7,6 +7,9 @@ module com.example.projetcrypto {
     requires org.kordamp.bootstrapfx.core;
 	requires jpbc.api;
 	requires jpbc.plaf;
+	requires java.logging;
+	requires jdk.httpserver;
+	requires java.instrument;
 
     opens com.example.projetcrypto to javafx.fxml;
     exports com.example.projetcrypto;
