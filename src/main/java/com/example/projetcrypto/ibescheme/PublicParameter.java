@@ -3,6 +3,7 @@ package com.example.projetcrypto.ibescheme;
 import java.io.Serializable;
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
+import it.unisa.dia.gas.jpbc.PairingParameters;
 
 /**
  * Cette classe contient les parametres publiques comme decrit dans le schema IBE de Boneh et Franklin  
@@ -23,12 +24,12 @@ public class PublicParameter implements Serializable{
 	
 	private byte[] generator;
 	private byte[] publicKey;
-	private Pairing pairing ;
+	private PairingParameters pairingParameter ;
 	
 	
-	public PublicParameter(Pairing pairing ,Element generator, Element publicKey) {
+	public PublicParameter(PairingParameters pairingParameters ,Element generator, Element publicKey) {
 
-		this.pairing = pairing;
+		this.pairingParameter = pairingParameters;
 		this.generator = generator.toBytes();
 		this.publicKey = publicKey.toBytes();
 		
@@ -51,8 +52,8 @@ public class PublicParameter implements Serializable{
 		this.publicKey = publicKey.toBytes();
 	}
 		
-	public Pairing getPairing() {
-		return pairing;
+	public PairingParameters getPairingParameters() {
+		return pairingParameter;
 	}
 
 	//definition des fonctions de hachages

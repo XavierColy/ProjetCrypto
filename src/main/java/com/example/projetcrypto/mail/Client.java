@@ -9,6 +9,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 /**
  * 
  * @author Giovanni
@@ -48,7 +50,7 @@ public class Client {
 	        //recuperation de l'objet
 	        ConfigClient configUser = (ConfigClient) updatedObject;
 	        byte[] result = configUser.getSecretKeyUid();
-	        System.out.println("Objet modifié reçu: "+ configUser.getPP().getPairing().getG1().newElementFromBytes(result));
+	        System.out.println("Objet modifié reçu: "+ PairingFactory.getPairing(configUser.getPP().getPairingParameters()).getG1().newElementFromBytes(result));
 	        
         } catch (MalformedURLException ex) {
         	Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

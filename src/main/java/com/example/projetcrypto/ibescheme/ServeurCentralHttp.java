@@ -59,7 +59,7 @@ public class ServeurCentralHttp {
 		//edition de la clé publique de l'autorité
 		Element Ppub = P.duplicate().mulZn(secretMasterKey);
 		
-		return new PublicParameter(pairing,P,Ppub);
+		return new PublicParameter(pairingParameters,P,Ppub);
 	}
 	
 	
@@ -89,7 +89,7 @@ public class ServeurCentralHttp {
 		
 		try {
 			
-			System.out.println("my5 address:"+InetAddress.getLocalHost());
+			System.out.println("my address:"+InetAddress.getLocalHost());
             InetSocketAddress s = new InetSocketAddress(InetAddress.getLocalHost(), 8080);
             
             HttpServer server = HttpServer.create(s, 1000);
