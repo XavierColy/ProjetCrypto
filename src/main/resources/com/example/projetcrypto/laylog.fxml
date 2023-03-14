@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.scene.control.ComboBox?>
+
+<?scenebuilder-stylesheet sendclient.css?>
+
+<?import java.lang.String?>
+<GridPane alignment="center" hgap="30" vgap="15"
+          fx:id="layLOG" styleClass="lay-log"
+          fx:controller="com.example.projetcrypto.LayLogController"
+          xmlns:fx="http://javafx.com/fxml">
+    <padding><javafx.geometry.Insets top="10" right="15" bottom="20" left="10"/></padding>
+
+    <Label fx:id="lblHOST" GridPane.columnIndex="0" GridPane.rowIndex="0" text="SMTP Server: "/>
+    <ComboBox fx:id="cmbHOST" value=" " GridPane.columnIndex="1" GridPane.rowIndex="0">
+        <items>
+            <FXCollections fx:factory="observableArrayList">
+                <String fx:value="smtp.gmail.com"/>
+                <String fx:value="smtp.mail.yahoo.com"/>
+                <String fx:value="smtp-mail.outlook.com"/>
+            </FXCollections>
+        </items>
+    </ComboBox>
+
+    <Label fx:id="lblUN" GridPane.columnIndex="0" GridPane.rowIndex="1" text="Username/Email: "/>
+    <TextField fx:id="tUN" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+    <Label fx:id="lblPW" GridPane.columnIndex="0" GridPane.rowIndex="2" text="Password: "/>
+    <PasswordField fx:id="tPW" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+    <HBox spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3" alignment="center_right">
+        <Button fx:id="btnLOG" text="Verify" onAction="#handleVerifyButton" />
+        <Label fx:id="lblStatus" textFill="#FF0000" />
+    </HBox>
+
+    <VBox spacing="10" GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.rowSpan="5">
+        <Label text="From: " />
+        <HBox spacing="10">
+            <TextField fx:id="tFromName" prefWidth="150" />
+            <TextField fx:id="tFromEmail" prefWidth="200" />
+        </HBox>
+
+        <Label text="To: " />
+        <TextField fx:id="tTo" />
+
+        <Label text="Subject: " />
+        <TextField fx:id="tSubject" />
+
+        <Label text="Message: " />
+        <TextArea fx:id="tMessage" prefHeight="150" />
+
+
+    </VBox>
+</GridPane>
