@@ -19,7 +19,9 @@ import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 
 /**
- * Cette classe contient les parametres publiques comme decrit dans le schema IBE de Boneh et Franklin  
+ * Cette classe mets en marche un serveur centralisé
+ * 
+ * génère et gère le partage dess parametres publiques comme decrit dans le schema IBE de Boneh et Franklin  
  * 
  * @param pairing Configuration de la courbe elliptique
  * @param generator Generateur d'un groupe cyclique
@@ -34,13 +36,14 @@ public class ServeurCentralHttp {
 	 
 	public static PairingParameters pairingParameters = PairingFactory.getPairingParameters("./src/main/resources/params/curves/a.properties");
     public static Pairing pairing = PairingFactory.getPairing(pairingParameters);
+    private static Element secretMasterKey;
+    
     @SuppressWarnings("rawtypes")
 	public static Field fieldZr= pairing.getZr();
     // chargement du groupe cyclique G1
  	@SuppressWarnings("rawtypes")
  	public static Field fieldG1= pairing.getG1();
  	
- 	private static Element secretMasterKey;
  	
  	
 	
@@ -78,7 +81,6 @@ public class ServeurCentralHttp {
 		
 		return Qid.duplicate().mulZn(secretMasterKey);
 	}
-	
 	
 	public static void main(String[] args){
 		
