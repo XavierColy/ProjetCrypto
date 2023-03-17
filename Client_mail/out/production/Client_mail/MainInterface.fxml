@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.control.TextArea?>
+<SplitPane dividerPositions="0.16" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+    <VBox fx:id="navigation" styleClass="navigation" style="-fx-background-color: #F5F5F5;">
+        <MenuBar>
+            <Menu text="File">
+                <graphic>
+                    <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/icons/icons8-medical-file-96.png"/>
+                    </ImageView>
+                </graphic>
+                <MenuItem text="New Email" />
+                <MenuItem text="New Folder" />
+                <MenuItem text="Exit" />
+            </Menu>
+            <Menu text="Edit">
+                <graphic>
+                    <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/icons/icons8-pen-squared-96.png"/>
+                    </ImageView>
+                </graphic>
+                <MenuItem text="Undo" />
+                <MenuItem text="Redo" />
+                <MenuItem text="Cut" />
+                <MenuItem text="Copy" />
+                <MenuItem text="Paste" />
+                <MenuItem text="Delete" />
+                <MenuItem text="Select All" />
+            </Menu>
+            <Menu text="View">
+                <graphic>
+                    <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/icons/icons8-view-100.png"/>
+                    </ImageView>
+                </graphic>
+                <MenuItem text="Refresh" />
+                <MenuItem text="Toggle Conversation View" />
+                <MenuItem text="Toggle Message Preview" />
+            </Menu>
+            <Menu text="Help">
+                <graphic>
+                    <ImageView fitHeight="16" fitWidth="16" pickOnBounds="true" preserveRatio="true">
+                        <Image url="@/icons/icons8-help-96.png"/>
+                    </ImageView>
+                </graphic>
+                <MenuItem text="Help Topics" />
+                <MenuItem text="About" />
+            </Menu>
+        </MenuBar>
+        <ListView fx:id="foldersListView" styleClass="list-view" />
+        <Button fx:id="newEmailButton" styleClass="button" text="New Email" />
+        <ListView fx:id="emailsListView" styleClass="list-view" />
+    </VBox>
+    <AnchorPane fx:id="content" styleClass="content">
+        <HBox styleClass="top-bar">
+            <Label text="Inbox" styleClass="label" />
+            <TextField styleClass="search-field" promptText="Search" />
+            <Button styleClass="button" text="Refresh" />
+        </HBox>
+        <VBox styleClass="email-list">
+            <Label text="Today" styleClass="label" />
+            <ListView fx:id="todayEmailsListView" styleClass="list-view" />
+            <Label text="Yesterday" styleClass="label" />
+            <ListView fx:id="yesterdayEmailsListView" styleClass="list-view" />
+            <Label text="Earlier This Week" styleClass="label" />
+            <ListView fx:id="earlierThisWeekEmailsListView" styleClass="list-view" />
+            <Label text="Last Week" styleClass="label" />
+            <ListView fx:id="lastWeekEmailsListView" styleClass="list-view" />
+            <HBox>
+                <VBox>
+                    <Label text="From:" />
+                    <TextField fx:id="senderTextField" />
+                    <Label text="To:" />
+                    <TextField fx:id="recipientTextField" />
+
+                </VBox>
+                <TextArea fx:id="emailContentTextArea" />
+            </HBox>
+        </VBox>
+    </AnchorPane>
+</SplitPane>
