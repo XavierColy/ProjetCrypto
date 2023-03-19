@@ -23,6 +23,10 @@ public class ClientMail {
 	
 	private String user;
 	
+	public ClientMail(String username) {
+		this.user = username;
+	}
+
 	public static Session connectServeurMail(String user, String password) {
 		
 		 Properties properties = new Properties();  
@@ -106,7 +110,8 @@ public class ClientMail {
 		   String path="C:\\Users\\USER\\Pictures\\image65.jpg";
 		   String user2 = "koffigiovanni.allaglo@uphf.fr";
 		   //sendmessagewithattachement(username, password,user2,path);
-		     connectServeurMail(username, password);
+		     Session session = connectServeurMail(username, password);
+		     //new ClientMail(username).envoyerMessage(session,user2,"ok","Hello");
 		     System.out.println("message sent ...");
 		     
 		     Scanner sc=new Scanner(System.in);
