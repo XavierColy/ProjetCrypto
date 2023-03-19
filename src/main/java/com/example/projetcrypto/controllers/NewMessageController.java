@@ -20,5 +20,7 @@ public class NewMessageController {
     //endregion
 
     //region methods
+    public void sendMail(){
+    }
 
 }
