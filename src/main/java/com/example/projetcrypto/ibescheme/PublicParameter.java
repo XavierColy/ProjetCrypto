@@ -68,11 +68,11 @@ public class PublicParameter implements Serializable{
 	 */
 	public static Element hash1(byte[] id,Pairing pairing) {
 		
-		/*Element Qid = pairing.getG1().newOneElement();
+		Element Qid = pairing.getG1().newOneElement();
 		Qid.setFromHash(id, 0, id.length);
 		
-		return Qid;*/
-		return pairing.getG1().newElementFromBytes(id);
+		return Qid;
+		//return pairing.getG1().newElementFromBytes(id);
 	}
 	
 	/**
