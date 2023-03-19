@@ -37,3 +37,4 @@
       <TextArea fx:id="messageField" layoutX="7.0" layoutY="180.0" prefHeight="609.0" prefWidth="990.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" />
    </children>
 </AnchorPane>
+        

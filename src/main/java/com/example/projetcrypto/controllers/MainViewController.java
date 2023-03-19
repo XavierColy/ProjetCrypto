@@ -2,7 +2,7 @@ package com.example.projetcrypto.controllers;
 
 import com.example.projetcrypto.TransitionController;
 import com.example.projetcrypto.utils.Config;
-import com.example.projetcrypto.utils.Email;
+import com.example.projetcrypto.utils.HandleEmail;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 
