@@ -1,6 +1,5 @@
 package com.example.projetcrypto.controllers;
 
-import com.example.projetcrypto.TransitionController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
