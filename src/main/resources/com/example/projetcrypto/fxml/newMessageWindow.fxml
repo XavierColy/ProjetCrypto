@@ -7,7 +7,7 @@
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <items>
-          <Button fx:id="sendButton" mnemonicParsing="false" text="Envoyer" />
+          <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendMail" text="Envoyer" />
             <Button fx:id="cancelButton" cancelButton="true" mnemonicParsing="false" text="Annuler" />
             <Button fx:id="SaveDraftButton" mnemonicParsing="false" text="Enregistrer le brouillon" />
         </items>

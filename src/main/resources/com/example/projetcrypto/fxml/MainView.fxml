@@ -9,10 +9,22 @@
    <children>
       <ToolBar layoutX="6.0" prefHeight="40.0" prefWidth="992.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <Button fx:id="newMessageButton" accessibleText="Nouveau message" maxWidth="160.0" mnemonicParsing="false" onAction="#displayNewMessageWindow" prefWidth="160.0" style="-fx-background-color: #008cc7;" text="Nouveau message" textFill="WHITE" />
-            <Button disable="true" mnemonicParsing="false" text="Répondre" />
-            <Button disable="true" mnemonicParsing="false" text="Faire suivre" />
-            <Button disable="true" mnemonicParsing="false" text="Supprimer" />
+          <Button fx:id="newMessageButton" accessibleText="Nouveau message" maxWidth="160.0" mnemonicParsing="false" onAction="#displayNewMessageWindow" prefWidth="160.0" style="-fx-background-color: #008cc7;" text="Nouveau message" textFill="WHITE">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="answerButton" disable="true" mnemonicParsing="false" text="Répondre">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button fx:id="forwardButton" disable="true" mnemonicParsing="false" text="Faire suivre">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
+            <Button disable="true" mnemonicParsing="false" text="Supprimer">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
         </items>
          <opaqueInsets>
             <Insets />
@@ -24,7 +36,7 @@
                <children>
                   <VBox prefHeight="758.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="receptionLabel" alignment="CENTER" prefWidth="160.0" text="Réception">
+                        <Label fx:id="receivedMessagesLabel" alignment="CENTER" prefWidth="160.0" text="Réception">
                            <padding>
                               <Insets bottom="4.0" top="4.0" />
                            </padding>
@@ -35,7 +47,7 @@
                               <Insets />
                            </VBox.margin>
                         </Label>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="160.0" text="Envoyés">
+                        <Label fx:id="sentMessagesLabel" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="160.0" text="Envoyés">
                            <padding>
                               <Insets bottom="4.0" top="4.0" />
                            </padding>
@@ -43,7 +55,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="36.0" prefWidth="160.0" text="Brouillons">
+                        <Label fx:id="draftMessagesLabel" alignment="CENTER" layoutX="10.0" layoutY="36.0" prefWidth="160.0" text="Brouillons">
                            <padding>
                               <Insets bottom="4.0" top="4.0" />
                            </padding>
@@ -51,7 +63,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="62.0" prefWidth="160.0" text="Spam">
+                        <Label fx:id="spamMessagesLabel" alignment="CENTER" layoutX="10.0" layoutY="62.0" prefWidth="160.0" text="Spam">
                            <padding>
                               <Insets bottom="4.0" top="4.0" />
                            </padding>
@@ -59,7 +71,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <Label alignment="CENTER" layoutX="10.0" layoutY="88.0" prefWidth="160.0" text="Corbeille">
+                        <Label fx:id="trashLabel" alignment="CENTER" layoutX="10.0" layoutY="88.0" prefWidth="160.0" text="Corbeille">
                            <padding>
                               <Insets bottom="4.0" top="4.0" />
                            </padding>
@@ -77,7 +89,7 @@
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <ListView prefHeight="756.0" prefWidth="244.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <ListView fx:id="mailList" prefHeight="756.0" prefWidth="244.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
