@@ -9,7 +9,7 @@
    <children>
       <ToolBar layoutX="6.0" prefHeight="40.0" prefWidth="992.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <Button fx:id="newMessageButton" accessibleText="Nouveau message" maxWidth="160.0" mnemonicParsing="false" onAction="#displayNewMessageWindow" prefWidth="160.0" style="-fx-background-color: #008cc7;" text="Nouveau message" textFill="WHITE">
+          <Button fx:id="newMessageButton" accessibleText="Nouveau message" maxWidth="160.0" mnemonicParsing="false" onAction="#handleNewMessageButton" prefWidth="160.0" style="-fx-background-color: #008cc7;" text="Nouveau message" textFill="WHITE">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
