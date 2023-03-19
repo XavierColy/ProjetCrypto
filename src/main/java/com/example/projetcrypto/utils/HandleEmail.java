@@ -5,23 +5,29 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.mail.search.MessageIDTerm;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
 
 /**
- * @author Kaoutar*/
+ * @author Kaoutar
+ */
 public class HandleEmail {
 
     //region send
-    /** Send Mail without attachments*/
-    public static void sendMail(String destination, String subject, String text){
+
+    /**
+     * Send Mail without attachments
+     */
+    public static void sendMail(String destination, String subject, String text) {
         try {
             MimeMessage message = new MimeMessage(getEmailSession());
             Store store = getEmailSession().getStore();
             store.connect();
-            var user= store.getFolder("INBOX").getFullName();
+            var user = store.getFolder("INBOX").getFullName();
             message.setFrom(user);
             message.setText(text);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destination));
@@ -34,13 +40,14 @@ public class HandleEmail {
 
 
     /**
-     * Send mail with attachments*/
-    public static void sendMail(String destination, String subject, String text, String[] attachmentPaths){
+     * Send mail with attachments
+     */
+    public static void sendMail(String destination, String subject, String text, String[] attachmentPaths) {
         try {
             MimeMessage message = new MimeMessage(getEmailSession());
             Store store = getEmailSession().getStore();
             store.connect();
-            var user= store.getFolder("INBOX").getFullName();
+            var user = store.getFolder("INBOX").getFullName();
             message.setFrom(user);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destination));
             message.setSubject(subject);
@@ -51,7 +58,7 @@ public class HandleEmail {
 
 
             MimeBodyPart attachementfile = new MimeBodyPart();
-            Arrays.stream(attachmentPaths).forEach(path-> {
+            Arrays.stream(attachmentPaths).forEach(path -> {
                 try {
                     attachementfile.attachFile(path);
                 } catch (IOException | MessagingException e) {
@@ -70,5 +77,118 @@ public class HandleEmail {
     }
     //endregion
 
+    public static void displayInbox() {
+        try {
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+
+            Message[] messages = inbox.getMessages();
+            for (int i = 0; i < messages.length; i++) {
+                String messageId = messages[i].getHeader("Message-ID")[0];
+                String subject = messages[i].getSubject();
+                System.out.println("Message " + (i + 1) + " ID: " + messageId);
+                System.out.println("Message " + (i + 1) + " Subject: " + subject);
+            }
+
+            inbox.close(false);
+            store.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteMail(String messageID) {
+        try {
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+
+            Folder folder = store.getFolder("INBOX");
+            folder.open(Folder.READ_WRITE);
+
+            Message[] messages = folder.search(new MessageIDTerm(messageID));
+            if (messages.length == 0) {
+                System.out.println("No messages found with the specified ID.");
+                return;
+            }
+
+            for (Message message : messages) {
+                message.setFlag(Flags.Flag.DELETED, true);
+                System.out.println("Message deleted successfully.");
+            }
+
+            folder.close(true);
+            store.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void forwardMail(String messageID, String forwardTo) {
+        try {
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+            Message[] messages = inbox.getMessages();
+            for (Message message : messages) {
+                if (message.getHeader("Message-ID")[0].equals(messageID)) {
+                    MimeMessage forward = new MimeMessage(getEmailSession());
+                    forward.setFrom(new InternetAddress(inbox.getFullName()));
+                    forward.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(forwardTo));
+                    forward.setSubject("FWD: " + message.getSubject());
+                    forward.setSentDate(message.getSentDate());
+                    forward.setHeader("Content-Type", message.getContentType());
+
+                    forward.setContent(message.getContent(), message.getContentType());
+
+                    Transport.send(forward);
+                    break;
+                }
+            }
+
+            inbox.close(false);
+            store.close();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void reply(String messageID,String text){
+        try {
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+
+            Message[] messages = inbox.getMessages();
+            for (Message message : messages) {
+                if (message.getHeader("Message-ID")[0].equals(messageID)) {
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Do you want to reply to only the sender or everyone? (Enter 1 for Sender, 2 for Everyone)");
+                    int replyType = scanner.nextInt();
+
+                    MimeMessage reply = (MimeMessage) message.reply(replyType != 1);
+                    reply.setText(text);
+                    reply.setSubject("RE: " + message.getSubject());
+                    reply.setFrom(new InternetAddress(inbox.getFullName()));
+                    Transport.send(reply);
+                    break;
+                }
+            }
+
+            inbox.close(false);
+            store.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
