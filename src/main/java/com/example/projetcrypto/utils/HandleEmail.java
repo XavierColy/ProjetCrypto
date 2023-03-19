@@ -1,5 +1,8 @@
 package com.example.projetcrypto.utils;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
@@ -72,26 +75,23 @@ public class HandleEmail {
     }
     //endregion
 
-    public static void displayInbox() {
-        try {
+    public static ObservableList<Message> getInboxEmails() {
+        try{
             Store store = getEmailSession().getStore("imaps");
             store.connect();
             Folder inbox = store.getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
 
             Message[] messages = inbox.getMessages();
-            for (int i = 0; i < messages.length; i++) {
-                String messageId = messages[i].getHeader("Message-ID")[0];
-                String subject = messages[i].getSubject();
-                System.out.println("Message " + (i + 1) + " ID: " + messageId);
-                System.out.println("Message " + (i + 1) + " Subject: " + subject);
-            }
+            ObservableList<Message> obsList = FXCollections.observableList(Arrays.stream(messages).toList());
 
             inbox.close(false);
             store.close();
+            return obsList;
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void deleteMail(String messageID) {

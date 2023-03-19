@@ -36,49 +36,11 @@
                <children>
                   <VBox prefHeight="758.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label fx:id="receivedMessagesLabel" alignment="CENTER" prefWidth="160.0" text="Réception">
-                           <padding>
-                              <Insets bottom="4.0" top="4.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <Label fx:id="sentMessagesLabel" alignment="CENTER" layoutX="10.0" layoutY="10.0" prefWidth="160.0" text="Envoyés">
-                           <padding>
-                              <Insets bottom="4.0" top="4.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Label>
-                        <Label fx:id="draftMessagesLabel" alignment="CENTER" layoutX="10.0" layoutY="36.0" prefWidth="160.0" text="Brouillons">
-                           <padding>
-                              <Insets bottom="4.0" top="4.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Label>
-                        <Label fx:id="spamMessagesLabel" alignment="CENTER" layoutX="10.0" layoutY="62.0" prefWidth="160.0" text="Spam">
-                           <padding>
-                              <Insets bottom="4.0" top="4.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Label>
-                        <Label fx:id="trashLabel" alignment="CENTER" layoutX="10.0" layoutY="88.0" prefWidth="160.0" text="Corbeille">
-                           <padding>
-                              <Insets bottom="4.0" top="4.0" />
-                           </padding>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </Label>
+                        <Button fx:id="receptionButton" mnemonicParsing="false" onAction="#displayInbox" prefWidth="160.0" text="Réception" />
+                        <Button fx:id="sentMessagesButton" layoutX="10.0" layoutY="140.0" mnemonicParsing="false" prefWidth="160.0" text="Envoyés" />
+                        <Button fx:id="draftMessagesButton" layoutX="10.0" layoutY="166.0" mnemonicParsing="false" prefWidth="160.0" text="Brouillons" />
+                        <Button fx:id="spamMessagesButton" layoutX="10.0" layoutY="192.0" mnemonicParsing="false" prefWidth="160.0" text="Spam" />
+                        <Button fx:id="trashButton" layoutX="10.0" layoutY="218.0" mnemonicParsing="false" prefWidth="160.0" text="Corbeille" />
                      </children>
                   </VBox>
                </children>
