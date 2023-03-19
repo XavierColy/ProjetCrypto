@@ -1,4 +1,4 @@
-package com.example.projetcrypto;
+package com.example.projetcrypto.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
