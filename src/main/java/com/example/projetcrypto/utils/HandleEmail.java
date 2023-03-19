@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
+import static com.example.projetcrypto.utils.Config.getSessionOwner;
 
 /**
  * @author Kaoutar
@@ -25,10 +26,7 @@ public class HandleEmail {
     public static void sendMail(String destination, String subject, String text) {
         try {
             MimeMessage message = new MimeMessage(getEmailSession());
-            Store store = getEmailSession().getStore();
-            store.connect();
-            var user = store.getFolder("INBOX").getFullName();
-            message.setFrom(user);
+            message.setFrom(getSessionOwner());
             message.setText(text);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destination));
             message.setSubject(subject);
@@ -45,10 +43,7 @@ public class HandleEmail {
     public static void sendMail(String destination, String subject, String text, String[] attachmentPaths) {
         try {
             MimeMessage message = new MimeMessage(getEmailSession());
-            Store store = getEmailSession().getStore();
-            store.connect();
-            var user = store.getFolder("INBOX").getFullName();
-            message.setFrom(user);
+            message.setFrom(getSessionOwner());
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destination));
             message.setSubject(subject);
 
@@ -138,7 +133,7 @@ public class HandleEmail {
             for (Message message : messages) {
                 if (message.getHeader("Message-ID")[0].equals(messageID)) {
                     MimeMessage forward = new MimeMessage(getEmailSession());
-                    forward.setFrom(new InternetAddress(inbox.getFullName()));
+                    forward.setFrom(new InternetAddress(getSessionOwner()));
                     forward.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(forwardTo));
                     forward.setSubject("FWD: " + message.getSubject());
                     forward.setSentDate(message.getSentDate());

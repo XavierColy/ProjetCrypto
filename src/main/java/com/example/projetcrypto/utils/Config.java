@@ -7,6 +7,8 @@ import java.util.Properties;
 public class Config {
     private static Session emailSession;
 
+    private static String sessionOwner;
+
     public static Session getEmailSession(){
         return Config.emailSession;
     }
@@ -31,5 +33,11 @@ public class Config {
                 return new PasswordAuthentication(email,passwd);
             }
         });
+
+        sessionOwner = email;
+    }
+
+    public static String getSessionOwner() {
+        return sessionOwner;
     }
 }
