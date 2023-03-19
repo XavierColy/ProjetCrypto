@@ -21,10 +21,10 @@ public class Config {
         properties.put("mail.smtp.port", "587");
 
         // configure imap
-        properties.put("mail.store.protocol", "imap");
-        properties.put("mail.imap.host", "imap.outlook.com");
-        properties.put("mail.imap.starttls.enable", "true");
-        properties.put("mail.imap.port", "993");
+        properties.put("mail.store.protocol", "imaps");
+        properties.put("mail.imaps.host", "imap.outlook.com");
+        properties.put("mail.imaps.starttls.enable", "true");
+        properties.put("mail.imaps.port", "993");
 
         emailSession = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
