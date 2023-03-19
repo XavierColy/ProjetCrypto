@@ -17,7 +17,7 @@ public class TransitionController {
 
     public void setPrevStage(Stage s) { this.prevStage = s; }
 
-    protected void displayNextWindow(String fxmlFileName, boolean closePrev) throws IOException {
+    public void displayNextWindow(String fxmlFileName, boolean closePrev) throws IOException {
         Stage s = new Stage();
         Pane p = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("../fxml/"+fxmlFileName)));
         s.setScene(new Scene(p));
