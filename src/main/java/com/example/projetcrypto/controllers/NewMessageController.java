@@ -4,7 +4,8 @@ import com.example.projetcrypto.utils.HandleEmail;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import com.example.projetcrypto.utils.SendEmail;
+import javafx.stage.Stage;
+//import com.example.projetcrypto.utils.SendEmail;
 
 import java.util.Scanner;
 
@@ -30,15 +31,28 @@ public class NewMessageController {
         String subject = subjectField.getText();
         String message = messageField.getText();
         String attachmentPath = attachmentsField.getText();
-        String user = "cryptotest10@outlook.com";
-        String password = "Azerty@2023";
+       // String user = "cryptotest10@outlook.com";
+       // String password = "Azerty@2023";
 
         HandleEmail.sendMail(recipient, subject, message) ;
+        Stage stage = (Stage) sendButton.getScene().getWindow();
+        stage.close(); // Close the window
 /*
         if (!attachmentPath.isEmpty()) {
             SendEmail.sendmessagewithattachement(user, password, recipient, attachmentPath);
         }*/
     }
+
+    public void cancel() {
+        cancelButton.getScene().getWindow().hide();
+    }
+
+
+    public void initialize() {
+        cancelButton.setOnAction(event -> cancel());
+    }
+
+
 }
 
 
