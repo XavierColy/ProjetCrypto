@@ -1,29 +1,32 @@
-package emails;
+package com.example.projetcrypto.utils;
 
+
+
+import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
+
 import javax.mail.Folder;
 import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
-import javax.mail.Flags.Flag;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.mail.search.MessageIDTerm;
 
+public class Forward {
 
-public class ReplyAll {
-    public static void replyToMessage(String user, String password,String replyMessage) {
+    public static void forwardMessage(String user, String password, String forwardTo) throws IOException{
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp-mail.outlook.com");
         properties.put("mail.smtp.port", "587");
-
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-                return new javax.mail.PasswordAuthentication(user, password);
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(user,password);
             }
         });
 
@@ -36,26 +39,26 @@ public class ReplyAll {
             Scanner myID = new Scanner(System.in);
 	        System.out.print("Enter the message ID: ");
 	        String messageID = myID.nextLine();
-	        
             Message[] messages = inbox.getMessages();
             for (Message message : messages) {
                 if (message.getHeader("Message-ID")[0].equals(messageID)) {
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.println("Do you want to reply to only the sender or everyone? (Enter 1 for Sender, 2 for Everyone)");
-                    int replyType = scanner.nextInt();
-                    
-                    MimeMessage reply = (MimeMessage) message.reply(replyType == 1 ? false : true);
-                    reply.setText(replyMessage);
-                    reply.setSubject("RE: " + message.getSubject());
-                    reply.setFrom(new InternetAddress(user));
-                    Transport.send(reply);
+                    MimeMessage forward = new MimeMessage(session);
+                    forward.setFrom(new InternetAddress(user));
+                    forward.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(forwardTo));
+                    forward.setSubject("FWD: " + message.getSubject());
+                    forward.setSentDate(message.getSentDate());
+                    forward.setHeader("Content-Type", message.getContentType());
+
+                    forward.setContent(message.getContent(), message.getContentType());
+
+                    Transport.send(forward);
                     break;
                 }
             }
 
             inbox.close(false);
             store.close();
-        } catch (Exception e) {
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }

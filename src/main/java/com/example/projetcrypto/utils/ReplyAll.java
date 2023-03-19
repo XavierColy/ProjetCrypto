@@ -1,32 +1,27 @@
-package emails;
+package com.example.projetcrypto.utils;
 
-
-
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
-
 import javax.mail.Folder;
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class forward {
 
-    public static void forwardMessage(String user, String password, String forwardTo) throws IOException{
+public class ReplyAll {
+    public static void replyToMessage(String user, String password,String replyMessage) {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp-mail.outlook.com");
         properties.put("mail.smtp.port", "587");
+
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user,password);
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(user, password);
             }
         });
 
@@ -39,26 +34,26 @@ public class forward {
             Scanner myID = new Scanner(System.in);
 	        System.out.print("Enter the message ID: ");
 	        String messageID = myID.nextLine();
+	        
             Message[] messages = inbox.getMessages();
             for (Message message : messages) {
                 if (message.getHeader("Message-ID")[0].equals(messageID)) {
-                    MimeMessage forward = new MimeMessage(session);
-                    forward.setFrom(new InternetAddress(user));
-                    forward.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(forwardTo));
-                    forward.setSubject("FWD: " + message.getSubject());
-                    forward.setSentDate(message.getSentDate());
-                    forward.setHeader("Content-Type", message.getContentType());
-
-                    forward.setContent(message.getContent(), message.getContentType());
-
-                    Transport.send(forward);
+                    Scanner scanner = new Scanner(System.in);
+                    System.out.println("Do you want to reply to only the sender or everyone? (Enter 1 for Sender, 2 for Everyone)");
+                    int replyType = scanner.nextInt();
+                    
+                    MimeMessage reply = (MimeMessage) message.reply(replyType == 1 ? false : true);
+                    reply.setText(replyMessage);
+                    reply.setSubject("RE: " + message.getSubject());
+                    reply.setFrom(new InternetAddress(user));
+                    Transport.send(reply);
                     break;
                 }
             }
 
             inbox.close(false);
             store.close();
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

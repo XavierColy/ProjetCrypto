@@ -1,28 +1,10 @@
-package emails;
+package com.example.projetcrypto.utils;
 import java.util.Properties;
-import java.util.Random;
-import java.io.IOException;  
-import java.util.Properties;  
-import javax.mail.Folder;  
-import javax.mail.Message;  
-import javax.mail.MessagingException;  
-import javax.mail.NoSuchProviderException;  
-import javax.mail.Session;  
-import java.io.File;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.Address;
-import javax.mail.Flags;
-import javax.mail.Multipart;
-import javax.mail.Part;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.Session;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Store;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
 public class Email {
 	

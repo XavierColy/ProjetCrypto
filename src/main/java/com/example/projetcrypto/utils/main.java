@@ -1,9 +1,8 @@
-package emails;
+package com.example.projetcrypto.utils;
 
 import java.io.IOException;
-import java.util.Scanner;
-//import emails.SendEmail;
-import emails.*;
+//import com.example.projetcrypto.emails.SendEmail;
+
 public class main {
 
 	public static void main(String[] args) throws IOException{
@@ -17,7 +16,7 @@ public class main {
 	   // SendEmail.sendmessage(user, password, destination, object, subject);
 	   //SendEmail.sendmessagewithattachement(user, password, destination, attachmentPath);
 	   // SendEmail.downloadEmailAttachments(user, password);
-	   forward.forwardMessage(user, password, destination);
+	   Forward.forwardMessage(user, password, destination);
 	   //Delete.deleteMessage(user, password, randomMsgID);
 	  
 	  

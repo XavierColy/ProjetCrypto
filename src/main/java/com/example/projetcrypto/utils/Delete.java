@@ -1,4 +1,4 @@
-package emails;
+package com.example.projetcrypto.utils;
 
 import java.util.Properties;
 import java.util.Scanner;
@@ -8,7 +8,6 @@ import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.Flags.Flag;
-import javax.mail.internet.InternetAddress;
 import javax.mail.search.MessageIDTerm;
 
 public class Delete {

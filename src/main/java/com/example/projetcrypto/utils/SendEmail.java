@@ -1,4 +1,4 @@
-package emails;
+package com.example.projetcrypto.utils;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,9 +11,8 @@ package emails;
  * @author imino
  */
 import java.util.Properties;
-import java.io.IOException;  
-import java.util.Properties;  
-import javax.mail.Folder;  
+import java.io.IOException;
+import javax.mail.Folder;
 import javax.mail.Message;  
 import javax.mail.MessagingException;  
 import javax.mail.NoSuchProviderException;  
@@ -34,8 +33,6 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import javax.mail.internet.MimeMultipart;
-  
 public class SendEmail{  
   
  public static void sendmessage(String user, String password, String destination,Scanner subject, Scanner object){
