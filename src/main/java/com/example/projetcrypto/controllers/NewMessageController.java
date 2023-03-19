@@ -31,16 +31,16 @@ public class NewMessageController {
         String subject = subjectField.getText();
         String message = messageField.getText();
         String attachmentPath = attachmentsField.getText();
-       // String user = "cryptotest10@outlook.com";
-       // String password = "Azerty@2023";
+        String[] tabAttachments = attachmentPath.split(";");
 
-        HandleEmail.sendMail(recipient, subject, message) ;
-        Stage stage = (Stage) sendButton.getScene().getWindow();
-        stage.close(); // Close the window
-/*
-        if (!attachmentPath.isEmpty()) {
-            SendEmail.sendmessagewithattachement(user, password, recipient, attachmentPath);
-        }*/
+
+        if (tabAttachments.length != 0) {
+            HandleEmail.sendMail(recipient, subject, message, tabAttachments) ;
+        }else{
+            HandleEmail.sendMail(recipient, subject, message) ;
+        }
+            Stage stage = (Stage) sendButton.getScene().getWindow();
+            stage.close(); // Close the window
     }
 
     public void cancel() {
