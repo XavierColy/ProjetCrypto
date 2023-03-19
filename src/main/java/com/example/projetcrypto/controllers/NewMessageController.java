@@ -10,6 +10,7 @@ import javafx.stage.FileChooser;
 
 
 import java.io.File;
+import java.util.List;
 
 
 /**
@@ -28,47 +29,47 @@ public class NewMessageController {
     //endregion
 
     //region methods
-    public void sendMail(){
 
+    public void addAttachments() {
+        FileChooser fileChooser = new FileChooser();
+        List<File> selectedFiles = fileChooser.showOpenMultipleDialog(joinAttachmentsButton.getScene().getWindow());
+        if (selectedFiles != null) {
+            String[] attachmentPaths = new String[selectedFiles.size()];
+            for (int i = 0; i < selectedFiles.size(); i++) {
+                attachmentPaths[i] = selectedFiles.get(i).getAbsolutePath();
+            }
+            attachmentsField.setText(String.join(";", attachmentPaths));
+        }
+    }
+    public void sendMail() {
         String recipient = recipientTextField.getText();
         String subject = subjectField.getText();
         String message = messageField.getText();
+        String cc = bccTextField.getText();
+        String attachmentPath = attachmentsField.getText();
 
+        String[] attachmentPaths = attachmentPath.split(";");
+        if (attachmentPaths.length == 1 && attachmentPaths[0].isEmpty()) {
+            HandleEmail.sendMail(recipient, subject, message, cc);
+        } else {
+            HandleEmail.sendMail(recipient, subject, message, attachmentPaths, cc);
+        }
 
-
-        HandleEmail.sendMail(recipient, subject, message) ;
         Stage stage = (Stage) sendButton.getScene().getWindow();
         stage.close(); // Close the window
-
     }
+
 
     public void cancel() {
         cancelButton.getScene().getWindow().hide();
     }
-    public void addAttachments() {
-        FileChooser fileChooser = new FileChooser();
-        File selectedFile = fileChooser.showOpenDialog(joinAttachmentsButton.getScene().getWindow());
-        if (selectedFile != null) {
-            attachmentsField.setText(selectedFile.getAbsolutePath());
-        }
-    }
 
-    public void sendEMail(){
-        String recipient = recipientTextField.getText();
-        String subject = subjectField.getText();
-        String message = messageField.getText();
-        String attachmentPath = attachmentsField.getText();
-
-        HandleEmail.sendMail(recipient, subject, message, new String[]{attachmentPath});
-        Stage stage = (Stage) sendButton.getScene().getWindow();
-        stage.close();
-    }
 
 
     public void initialize() {
         cancelButton.setOnAction(event -> cancel());
         joinAttachmentsButton.setOnAction(event -> addAttachments());
-        sendButton.setOnAction(event -> sendEMail());
+        sendButton.setOnAction(event -> sendMail());
     }
 
 

@@ -9,6 +9,7 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.MessageIDTerm;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -26,12 +27,15 @@ public class HandleEmail {
     /**
      * Send Mail without attachments
      */
-    public static void sendMail(String destination, String subject, String text) {
+    public static void sendMail(String destination, String subject, String text, String cc) {
         try {
             MimeMessage message = new MimeMessage(getEmailSession());
             message.setFrom(getSessionOwner());
             message.setText(text);
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destination));
+            if (cc != null && !cc.isEmpty()) {
+                message.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
+            }
             message.setSubject(subject);
             Transport.send(message);
         } catch (MessagingException e) {
@@ -40,39 +44,44 @@ public class HandleEmail {
     }
 
 
+
     /**
      * Send mail with attachments
      */
-    public static void sendMail(String destination, String subject, String text, String[] attachmentPaths) {
+    public static void sendMail(String destination, String subject, String text, String[] attachmentPaths, String cc) {
         try {
             MimeMessage message = new MimeMessage(getEmailSession());
             message.setFrom(getSessionOwner());
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(destination));
+
+            // Add CC recipient if present
+            if (cc != null && !cc.isEmpty()) {
+                message.addRecipient(Message.RecipientType.CC, new InternetAddress(cc));
+            }
+
             message.setSubject(subject);
 
             Multipart emailContent = new MimeMultipart();
             MimeBodyPart bodypart = new MimeBodyPart();
             bodypart.setText(text);
 
-
-            MimeBodyPart attachementfile = new MimeBodyPart();
-            Arrays.stream(attachmentPaths).forEach(path -> {
-                try {
-                    attachementfile.attachFile(path);
-                } catch (IOException | MessagingException e) {
-                    throw new RuntimeException(e);
-                }
-            });
             emailContent.addBodyPart(bodypart);
-            emailContent.addBodyPart(attachementfile);
+
+            // Add attachments
+            for (String attachmentPath : attachmentPaths) {
+                MimeBodyPart attachmentPart = new MimeBodyPart();
+                attachmentPart.attachFile(new File(attachmentPath));
+                emailContent.addBodyPart(attachmentPart);
+            }
+
             message.setContent(emailContent);
             Transport.send(message);
 
-        } catch (MessagingException e) {
+        } catch (MessagingException | IOException e) {
             e.printStackTrace();
         }
-
     }
+
     //endregion
 
     public static ObservableList<Message> getInboxEmails() {
