@@ -10,10 +10,11 @@ import javafx.stage.Stage;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
-import javax.mail.Session;
 import javax.mail.Transport;
 import java.io.IOException;
-import java.util.Properties;
+
+import static com.example.projetcrypto.utils.Config.getEmailSession;
+import static com.example.projetcrypto.utils.Config.setEmailSession;
 
 public class LoginController extends TransitionController {
 
@@ -26,18 +27,6 @@ public class LoginController extends TransitionController {
     @FXML
     private PasswordField passwordField;
 
-    private Session emailSession;
-
-    @FXML
-    private void initialize() {
-        // Initialize the email session with default properties
-        Properties properties = System.getProperties();
-        properties.put("mail.smtp.host", "smtp-mail.outlook.com");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.port", "587");
-        emailSession = Session.getDefaultInstance(properties);
-    }
 
     @FXML
     private void handleLogin() {
@@ -56,8 +45,9 @@ public class LoginController extends TransitionController {
 
         try {
             // Try to connect to the SMTP server using the user's credentials
-            Transport transport = emailSession.getTransport("smtp");
-            transport.connect(emailSession.getProperty("mail.smtp.host"), email, password);
+            setEmailSession(email,password);
+            Transport transport = getEmailSession().getTransport("smtp");
+            transport.connect();
             transport.close();
 
             // If the connection is successful, navigate to next window
