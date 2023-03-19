@@ -1,5 +1,6 @@
 package com.example.projetcrypto.controllers;
 
+import com.example.projetcrypto.TransitionController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
@@ -11,12 +12,13 @@ import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
+import java.io.IOException;
 import java.util.Properties;
 
-public class LoginController {
+public class LoginController extends TransitionController {
 
     @FXML
-    private AnchorPane rootPane;
+    private AnchorPane anchorPane;
 
     @FXML
     private TextField usernameField;
@@ -58,14 +60,10 @@ public class LoginController {
             transport.connect(emailSession.getProperty("mail.smtp.host"), email, password);
             transport.close();
 
-            // If the connection is successful, show a success message and close the login window
-            Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-            successAlert.setHeaderText("Login Successful");
-            successAlert.setContentText("You have successfully logged in to your email account.");
-            successAlert.showAndWait();
+            // If the connection is successful, navigate to next window
+            this.setPrevStage((Stage) anchorPane.getScene().getWindow());
+            displayNextWindow("MainView.fxml", true);
 
-            Stage stage = (Stage) rootPane.getScene().getWindow();
-            stage.close();
         } catch (AuthenticationFailedException e) {
             // If authentication fails, show an error message
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -78,6 +76,8 @@ public class LoginController {
             errorAlert.setHeaderText("Login Error");
             errorAlert.setContentText("An error occurred while trying to log in. Please try again later.");
             errorAlert.showAndWait();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
