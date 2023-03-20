@@ -35,8 +35,11 @@ public class MainViewController extends TransitionController {
 
 
     @FXML
-    private void init() {
-        mailList = new ListView<>(getInboxEmails());
+    private void initialize() {
+        if (mailList == null) {
+            mailList = new ListView<EmailModel>();
+        }
+        mailList.setItems(getInboxEmails() );
     }
 
     @FXML
@@ -54,7 +57,6 @@ public class MainViewController extends TransitionController {
             mailList = new ListView<EmailModel>();
         }
         mailList.setItems(getInboxEmails() );
-
     }
    /* @FXML
     private void showMailDetails() {
@@ -90,21 +92,21 @@ public class MainViewController extends TransitionController {
         }
     }
 
-/*
+*/
     @FXML
     public void showSentMails() {
-        if (mailList == null) {
-            mailList = new ListView<Message>();
-        }
-        mailList.setItems(getSentEmails());
-        // Add an event listener to call showMailDetails when an email is selected
-        mailList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                showMailDetails();
-            }
-        });
+//        if (mailList == null) {
+//            mailList = new ListView<>();
+//        }
+//        mailList.setItems(getSentEmails());
+//        // Add an event listener to call showMailDetails when an email is selected
+//        mailList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+//            if (newSelection != null) {
+//                showMailDetails();
+//            }
+//        });
     }
-*/
+
    /* public void forward(){
         forwardMail(String messageID, String forwardTo);
     }
