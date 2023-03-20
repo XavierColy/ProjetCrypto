@@ -9,16 +9,22 @@ public class EmailModel {
     private final String sender;
     private final String subject;
     private final String text;
+    private final String folderName;
 
     public EmailModel(Message message) throws MessagingException, IOException {
         this.id = message.getHeader("Message-ID")[0];
         this.subject = message.getSubject();
         this.sender = message.getFrom()[0].toString();
         this.text = message.getContent().toString();
+        this.folderName = message.getFolder().getFullName();
     }
 
     public String getId() {
         return id;
+    }
+
+    public String getFolderName() {
+        return folderName;
     }
 
     @Override
