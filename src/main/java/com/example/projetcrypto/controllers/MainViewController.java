@@ -89,7 +89,7 @@ public class MainViewController extends TransitionController {
             folder.open(Folder.READ_WRITE);
             Message[] messages = folder.search(new MessageIDTerm(this.selectedEmail.getId()));
             Message foundMessage = messages[0];
-            deleteMail(foundMessage.getHeader("Message-ID")[0]);
+            deleteMail(foundMessage.getHeader("Message-ID")[0], this.selectedEmail.getFolderName());
             folder.close(true);
             store.close();
             displayInbox();

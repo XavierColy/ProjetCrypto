@@ -112,12 +112,12 @@ public class HandleEmail {
         return null;
     }
 
-    public static void deleteMail(String messageID) {
+    public static void deleteMail(String messageID, String folderName) {
         try {
             Store store = getEmailSession().getStore("imaps");
             store.connect();
 
-            Folder folder = store.getFolder("INBOX");
+            Folder folder = store.getFolder(folderName);
             folder.open(Folder.READ_WRITE);
 
             Message[] messages = folder.search(new MessageIDTerm(messageID));
