@@ -34,7 +34,7 @@ public class MainViewController extends TransitionController {
     public TextArea textArea;
     @FXML
     private Label mailContentLabel;
-    private Message selectedMessage;
+    private EmailModel selectedEmail;
 
 
     @FXML
@@ -61,7 +61,7 @@ public class MainViewController extends TransitionController {
     public void displayInbox() {
         setButtonsAndMailZoneActivated(false);
 
-        this.selectedMessage = null;
+        this.selectedEmail = null;
 
         if (mailList == null) {
             mailList = new ListView<EmailModel>();
@@ -72,7 +72,7 @@ public class MainViewController extends TransitionController {
     public void showSentMails() {
         setButtonsAndMailZoneActivated(false);
 
-        this.selectedMessage = null;
+        this.selectedEmail = null;
 
         if (mailList == null) {
             mailList = new ListView<EmailModel>();
@@ -83,7 +83,15 @@ public class MainViewController extends TransitionController {
 
     public void deleteEmail() {
         try {
-            deleteMail(this.selectedMessage.getHeader("Message-ID")[0]);
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+            Folder folder = store.getFolder(this.selectedEmail.getFolderName());
+            folder.open(Folder.READ_WRITE);
+            Message[] messages = folder.search(new MessageIDTerm(this.selectedEmail.getId()));
+            Message foundMessage = messages[0];
+            deleteMail(foundMessage.getHeader("Message-ID")[0]);
+            folder.close(true);
+            store.close();
             displayInbox();
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -93,9 +101,6 @@ public class MainViewController extends TransitionController {
 
    /* public void forward(){
         forwardMail(String messageID, String forwardTo);
-    }
-    public void delete(){
-        deleteMail(String messageID);
     }
     public void replyto(){
         reply(String messageID,String text);
@@ -107,11 +112,11 @@ public class MainViewController extends TransitionController {
         try {
             Store store = getEmailSession().getStore("imaps");
             store.connect();
-            Folder folder = store.getFolder("INBOX");
+            Folder folder = store.getFolder(newValue.getFolderName());
             folder.open(Folder.READ_WRITE);
             Message[] messages = folder.search(new MessageIDTerm(newValue.getId()));
             Message foundMessage = messages[0];
-            this.selectedMessage = foundMessage;
+            this.selectedEmail = newValue;
 
             //Set subject
             subjectField.setText(foundMessage.getSubject());
