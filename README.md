@@ -11,24 +11,24 @@ où **example** est une fonction, **alpha** le paramètre principale à son entr
 
 Dans le sens de l'envoi de message :
 
-              Fichier initiale ---> [divide]
+      Fichier initiale ---> [divide]
 
-                                    ArrayList<byte[]> ---> [Encrypt]
+                          ArrayList<byte[]> ---> [Encrypt]
                               
-                                                           EncryptResult ---> [produireFichierChiffrer]
+                                                EncryptResult ---> [produireFichierChiffrer]
                                                                
-                                                                                                       fichier à envoyer par mail.
+                                                                   fichier à envoyer par mail.
                                                                                                        
                                                                                                    
 Dans le sens inverse :
 
-               fichier recu par mail ---> [fileToObject]
+      fichier recu par mail ---> [fileToObject]
                                           
-                                          EncryptResult ---> [decrypt]
+                                  EncryptResult ---> [decrypt]
                                             
-                                                              ArrayList<byte[]> ---> [produireFichierDechiffrer]
+                                                   ArrayList<byte[]> ---> [produireFichierDechiffrer]
                                                               
-                                                                                      fichier initiale.
+                                                                                fichier initiale.
                                                                                       
 Consignes:
 
