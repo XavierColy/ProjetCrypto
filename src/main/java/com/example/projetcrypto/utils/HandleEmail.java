@@ -13,7 +13,6 @@ import javax.mail.search.MessageIDTerm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -87,21 +86,21 @@ public class HandleEmail {
 
     //endregion
 
-    public static ObservableList<EmailModel> getInboxEmails() {
+    public static ObservableList<EmailModel> getEmailsByFolder(String folderName) {
         try{
             Store store = getEmailSession().getStore("imaps");
             store.connect();
-            Folder inbox = store.getFolder("INBOX");
-            inbox.open(Folder.READ_ONLY);
+            Folder folder = store.getFolder(folderName);
+            folder.open(Folder.READ_ONLY);
 
-            Message[] messages = inbox.getMessages();
+            Message[] messages = folder.getMessages();
             List<EmailModel> emailModels= new ArrayList<>();
             for (Message m : messages) {
                 emailModels.add(new EmailModel(m));
             }
             ObservableList<EmailModel> obsList = FXCollections.observableList(emailModels);
 
-            inbox.close(false);
+            folder.close(false);
             store.close();
             return obsList;
         } catch (Exception e) {
@@ -109,32 +108,6 @@ public class HandleEmail {
         }
         return null;
     }
-    public static ObservableList<EmailModel> getSentEmails() {
-        try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-            Folder sentFolder = store.getFolder("Sent");
-            sentFolder.open(Folder.READ_WRITE);
-
-            Message[] messages = sentFolder.getMessages();
-            List<EmailModel> emailModels= new ArrayList<>();
-            for (Message m : messages) {
-                emailModels.add(new EmailModel(m));
-            }
-            ObservableList<EmailModel> obsList = FXCollections.observableList(emailModels);
-
-            sentFolder.close(false);
-            store.close();
-            return obsList;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-
-    }
-
-
-
 
     public static void deleteMail(String messageID) {
         try {

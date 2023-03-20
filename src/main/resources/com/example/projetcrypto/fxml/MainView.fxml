@@ -22,7 +22,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" text="Supprimer">
+            <Button fx:id="deleteButton" disable="true" mnemonicParsing="false" onAction="#deleteEmail" text="Supprimer">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>

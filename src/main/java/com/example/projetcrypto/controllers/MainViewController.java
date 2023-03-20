@@ -12,8 +12,7 @@ import javax.mail.search.MessageIDTerm;
 import java.io.IOException;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
-import static com.example.projetcrypto.utils.HandleEmail.getInboxEmails;
-import static com.example.projetcrypto.utils.HandleEmail.getSentEmails;
+import static com.example.projetcrypto.utils.HandleEmail.*;
 
 public class MainViewController extends TransitionController {
     @FXML
@@ -43,7 +42,7 @@ public class MainViewController extends TransitionController {
         if (mailList == null) {
             mailList = new ListView<EmailModel>();
         }
-        mailList.setItems(getInboxEmails() );
+        mailList.setItems(getEmailsByFolder("INBOX") );
 
         // Only allowed to select single row in the ListView.
         mailList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -60,22 +59,36 @@ public class MainViewController extends TransitionController {
 
     @FXML
     public void displayInbox() {
+        setButtonsAndMailZoneActivated(false);
+
+        this.selectedMessage = null;
+
         if (mailList == null) {
             mailList = new ListView<EmailModel>();
         }
-        mailList.setItems(getInboxEmails() );
+        mailList.setItems(getEmailsByFolder("INBOX") );
     }
     @FXML
     public void showSentMails() {
+        setButtonsAndMailZoneActivated(false);
+
+        this.selectedMessage = null;
+
         if (mailList == null) {
             mailList = new ListView<EmailModel>();
         }
-        mailList.setItems(getSentEmails());
-
+        mailList.setItems(getEmailsByFolder("Sent"));
     }
 
 
-
+    public void deleteEmail() {
+        try {
+            deleteMail(this.selectedMessage.getHeader("Message-ID")[0]);
+            displayInbox();
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
    /* public void forward(){
@@ -89,13 +102,7 @@ public class MainViewController extends TransitionController {
     }*/
 
     private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue){
-        //Set the zone visible
-        emailSplitPane.setVisible(true);
-
-        //Set buttons enabled
-        forwardButton.setDisable(false);
-        replyButton.setDisable(false);
-        deleteButton.setDisable(false);
+        setButtonsAndMailZoneActivated(true);
 
         try {
             Store store = getEmailSession().getStore("imaps");
@@ -122,5 +129,15 @@ public class MainViewController extends TransitionController {
         } catch (MessagingException | IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void setButtonsAndMailZoneActivated(boolean state){
+        //Set the zone visible
+        emailSplitPane.setVisible(state);
+
+        //Set buttons enabled
+        forwardButton.setDisable(!state);
+        replyButton.setDisable(!state);
+        deleteButton.setDisable(!state);
     }
 }
