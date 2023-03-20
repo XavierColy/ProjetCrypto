@@ -22,12 +22,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-
 import com.example.projetcrypto.ibescheme.PublicParameter;
-
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
-import it.unisa.dia.gas.jpbc.PairingParameters;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
 /**
  * Implemente un client qui se connectera a un serveur via une url <code>ServeurCentralHttp<code>
@@ -309,25 +306,37 @@ public class Client {
 	 * 
 	 * @throws Throwable
 	 */
-	public static ArrayList<byte[]> divide(String piece,int size) throws Throwable{
+	public static ArrayList<byte[]> divide(String piece,int size) {
 		
-		FileInputStream fis = new FileInputStream(piece);
-	    int sz=fis.available();
-	    byte[] b=new byte[sz];
-	    fis.read(b);
-	    int o = sz%size;	//know how much bytes under 128
-	    ArrayList<byte[]> q = new ArrayList<byte[]>();//we add the byte array to an arraylist
+		ArrayList<byte[]> q = new ArrayList<byte[]>();//we add the byte array to an arraylist
+		try (FileInputStream fileInputStream = new FileInputStream(piece)) {
+			int taille = fileInputStream.available();
+			byte[] b=new byte[taille];
+			fileInputStream.read(b);
+			int mod = taille%size;	//know how much bytes under 128
+			
 
-	    for (int i = 0; i < b.length; i += size) {
-	        q.add( Arrays.copyOfRange(b, i, Math.min(i + size, b.length)));
-	    }
-	    q.add( Arrays.copyOfRange(b, sz-o,sz));
+			for (int i = 0; i < b.length; i += size) {
+			    q.add( Arrays.copyOfRange(b, i, Math.min(i + size, b.length)));
+			}
+			q.add( Arrays.copyOfRange(b, taille-mod,taille));
 
-	    return q;
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		
+		return q;
 
 	}
 	
-	
+	/**
+	 * 
+	 * @param path Chemin du fichier correspondant à l'objet serialisé
+	 * 
+	 * @return l'instance de l'objet <code>EncryptResult<code> correspondante au fichier dont le chemin est passé en paramètre
+	 * 
+	 */
 	public static EncryptResult fileToObject(String path) {
 		
 		EncryptResult encryptResult = null;
@@ -363,10 +372,10 @@ public class Client {
 		
 	    Pairing pairing = PairingFactory.getPairing(a.configClient.getPP().getPairingParameters());
 	    
-	    EncryptResult alpha = encrypt(divide("image65.jpg",128),user.getBytes(), pairing,pairing.getG1().newElementFromBytes(a.configClient.getPP().getPublicKey()),pairing.getG1().newElementFromBytes(a.configClient.getPP().getGenerator()));
+	    EncryptResult alpha = encrypt(divide("testfile/image65.jpg",128),user.getBytes(), pairing,pairing.getG1().newElementFromBytes(a.configClient.getPP().getPublicKey()),pairing.getG1().newElementFromBytes(a.configClient.getPP().getGenerator()));
 	    ArrayList<byte[]> beta = decrypt(alpha, pairing,pairing.getG1().newElementFromBytes(a.configClient.getSecretKeyUid()));
 	    
-	    produireFichierDechiffrer("text3.jpg", beta);
+	    produireFichierDechiffrer("image66.jpg", beta);
 	    
 	}
 }

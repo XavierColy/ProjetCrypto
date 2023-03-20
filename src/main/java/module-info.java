@@ -10,6 +10,7 @@ module com.example.projetcrypto {
 	requires jdk.httpserver;
 	requires java.instrument;
 	requires java.mail;
+	requires java.desktop;
 
     opens com.example.projetcrypto to javafx.fxml;
     exports com.example.projetcrypto;

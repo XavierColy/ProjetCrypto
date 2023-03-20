@@ -72,7 +72,6 @@ public class PublicParameter implements Serializable{
 		Qid.setFromHash(id, 0, id.length);
 		
 		return Qid;
-		//return pairing.getG1().newElementFromBytes(id);
 	}
 	
 	/**
