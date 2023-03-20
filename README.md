@@ -1,4 +1,4 @@
-## Processus chiffrement, déchiffrement de pièce jointe
+## Processus chiffrement, déchiffrement de pièce jointe(fichier texte et image)
 
 
 
@@ -32,7 +32,7 @@ Dans le sens inverse :
                                                                                       
 Consignes:
 
-* le resulat de [produireFichierChiffrer] est d'extension .encrypt (en plus de l'extension initiale du fichier)
+* le resulat de *[produireFichierChiffrer]* est d'extension .encrypt (en plus de l'extension initiale du fichier)
 * le fichier recu par mail est stocker comme temporaire 
 * Une fois le fichier recu, verifier si il contient l'extension .encrypt, le cas échéant : retirer l'extension et procéder à la suite. Sinon rendre le fichier definitif.
 * Une fois le fichier initilale retrouvée, le sauvegarder en definitif , supprimer le fichier temporaire.
