@@ -109,7 +109,7 @@ public class HandleEmail {
         }
         return null;
     }
-    public static ObservableList<Message> getSentEmails() {
+    public static ObservableList<EmailModel> getSentEmails() {
         try {
             Store store = getEmailSession().getStore("imaps");
             store.connect();
@@ -117,36 +117,20 @@ public class HandleEmail {
             sentFolder.open(Folder.READ_WRITE);
 
             Message[] messages = sentFolder.getMessages();
-            ObservableList<Message> obsList = FXCollections.observableList(Arrays.stream(messages).toList());
+            List<EmailModel> emailModels= new ArrayList<>();
+            for (Message m : messages) {
+                emailModels.add(new EmailModel(m));
+            }
+            ObservableList<EmailModel> obsList = FXCollections.observableList(emailModels);
 
-            // Close the folder and store
             sentFolder.close(false);
             store.close();
-
             return obsList;
-        } catch (FolderClosedException e) {
-            // Reconnect to the mail server and reopen the folder
-            try {
-                Store store = getEmailSession().getStore("imaps");
-                store.connect();
-                Folder sentFolder = store.getFolder("Sent");
-                sentFolder.open(Folder.READ_WRITE);
-
-                Message[] messages = sentFolder.getMessages();
-                ObservableList<Message> obsList = FXCollections.observableList(Arrays.stream(messages).toList());
-
-                // Close the folder and store
-                sentFolder.close(false);
-                store.close();
-
-                return obsList;
-            } catch (MessagingException ex) {
-                ex.printStackTrace();
-            }
-        } catch (MessagingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+
     }
 
 
