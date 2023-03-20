@@ -45,9 +45,7 @@ public class MainViewController extends TransitionController {
         displayNextWindow("newMessageWindow.fxml", false);
     }
 
-    /*public void displayInbox(ActionEvent actionEvent) {
-        mailList = new ListView<>(getInboxEmails());
-    }*/
+
     @FXML
     public void displayInbox() {
         if (mailList == null) {
@@ -56,55 +54,19 @@ public class MainViewController extends TransitionController {
         mailList.setItems(getInboxEmails() );
 
     }
-   /* @FXML
-    private void showMailDetails() {
-        Message selectedMessage = mailList.getSelectionModel().getSelectedItem();
-
-        if (selectedMessage != null) {
-            try {
-                Object content = selectedMessage.getContent();
-                String messageText = "";
-
-                if (content instanceof String) {
-                    // Email content is plain text
-                    messageText = (String) content;
-                } else if (content instanceof MimeMultipart) {
-                    // Email content is multipart, try to extract plain text part
-                    MimeMultipart multipart = (MimeMultipart) content;
-                    int count = multipart.getCount();
-                    for (int i = 0; i < count; i++) {
-                        BodyPart bodyPart = multipart.getBodyPart(i);
-                        if (bodyPart.isMimeType("text/plain")) {
-                            messageText = (String) bodyPart.getContent();
-                            break;
-                        }
-                    }
-                }
-
-                // Update the UI with the selected email's content
-                mailContentLabel.setText(messageText);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-/*
     @FXML
     public void showSentMails() {
         if (mailList == null) {
-            mailList = new ListView<Message>();
+            mailList = new ListView<EmailModel>();
         }
         mailList.setItems(getSentEmails());
-        // Add an event listener to call showMailDetails when an email is selected
-        mailList.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            if (newSelection != null) {
-                showMailDetails();
-            }
-        });
+
     }
-*/
+
+
+
+
+
    /* public void forward(){
         forwardMail(String messageID, String forwardTo);
     }
