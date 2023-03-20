@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
 <AnchorPane prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #eeeeee;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.projetcrypto.controllers.MainViewController">
    <children>
       <ToolBar layoutX="6.0" prefHeight="40.0" prefWidth="992.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -37,10 +38,9 @@
                   <VBox prefHeight="758.0" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Button fx:id="receptionButton" mnemonicParsing="false" onAction="#displayInbox" prefWidth="160.0" text="Réception" />
-                        <Button fx:id="sentMessagesButton" layoutX="10.0" layoutY="140.0" mnemonicParsing="false" prefWidth="160.0" text="Envoyés" />
+                        <Button fx:id="sentMessagesButton" layoutX="10.0" layoutY="140.0" mnemonicParsing="false" prefWidth="160.0" text="Envoyés" onAction="#showSentMails"/>
                         <Button fx:id="draftMessagesButton" layoutX="10.0" layoutY="166.0" mnemonicParsing="false" prefWidth="160.0" text="Brouillons" />
-                        <Button fx:id="spamMessagesButton" layoutX="10.0" layoutY="192.0" mnemonicParsing="false" prefWidth="160.0" text="Spam" />
-                        <Button fx:id="trashButton" layoutX="10.0" layoutY="218.0" mnemonicParsing="false" prefWidth="160.0" text="Corbeille" />
+
                      </children>
                   </VBox>
                </children>
@@ -54,7 +54,11 @@
                               <ListView fx:id="mailList" prefHeight="756.0" prefWidth="244.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" >
+                        <children>
+                            <Label fx:id="mailContentLabel" layoutX="140.0" layoutY="230.0" prefHeight="130.0" prefWidth="400.0" wrapText="true" />
+                        </children>
+                      </AnchorPane>
                     </items>
                   </SplitPane>
                </children></AnchorPane>
