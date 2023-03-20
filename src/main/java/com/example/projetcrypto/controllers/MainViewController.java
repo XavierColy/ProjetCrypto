@@ -1,12 +1,12 @@
 package com.example.projetcrypto.controllers;
 
+import com.example.projetcrypto.bo.EmailModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.stage.Stage;
 
-import javax.mail.Message;
 import java.io.IOException;
 
 import static com.example.projetcrypto.utils.HandleEmail.getInboxEmails;
@@ -16,7 +16,7 @@ public class MainViewController extends TransitionController {
     public Button newMessageButton;
     public Button answerButton;
     public Button forwardButton;
-    public ListView<Message> mailList;
+    public ListView<EmailModel> mailList;
     public Button receptionButton;
     public Button sentMessagesButton;
     public Button draftMessagesButton;
@@ -25,7 +25,7 @@ public class MainViewController extends TransitionController {
 
 
     @FXML
-    private void init() {
+    private void initialie() {
         mailList = new ListView<>(getInboxEmails());
     }
 
@@ -35,6 +35,7 @@ public class MainViewController extends TransitionController {
         displayNextWindow("newMessageWindow.fxml", false);
     }
 
+    @FXML
     public void displayInbox(ActionEvent actionEvent) {
         mailList = new ListView<>(getInboxEmails());
     }

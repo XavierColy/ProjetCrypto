@@ -1,5 +1,6 @@
 package com.example.projetcrypto.utils;
 
+import com.example.projetcrypto.bo.EmailModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -10,7 +11,9 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.search.MessageIDTerm;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
@@ -75,7 +78,7 @@ public class HandleEmail {
     }
     //endregion
 
-    public static ObservableList<Message> getInboxEmails() {
+    public static ObservableList<EmailModel> getInboxEmails() {
         try{
             Store store = getEmailSession().getStore("imaps");
             store.connect();
@@ -83,7 +86,11 @@ public class HandleEmail {
             inbox.open(Folder.READ_ONLY);
 
             Message[] messages = inbox.getMessages();
-            ObservableList<Message> obsList = FXCollections.observableList(Arrays.stream(messages).toList());
+            List<EmailModel> emailModels= new ArrayList<>();
+            for (Message m : messages) {
+                emailModels.add(new EmailModel(m));
+            }
+            ObservableList<EmailModel> obsList = FXCollections.observableList(emailModels);
 
             inbox.close(false);
             store.close();
