@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.projetcrypto.controllers.LoginController" vgap="10" hgap="10">
+
+<GridPane hgap="10" vgap="10" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.projetcrypto.controllers.LoginController">
     <AnchorPane id="loginAnchorPane" fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #fff;">
         <children>
-            <Label id="titleLabel" layoutX="181.0" layoutY="54.0" text="Email Client" style="-fx-font-size: 32px; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-family: 'Roboto', sans-serif;"/>
+            <Label id="titleLabel" layoutX="181.0" layoutY="54.0" style="-fx-font-size: 32px; -fx-text-fill: #1a73e8; -fx-font-weight: bold; -fx-font-family: 'Roboto', sans-serif;" text="Email Client" />
             <Label id="usernameLabel" layoutX="162.0" layoutY="123.0" text="Username" />
-            <TextField id="usernameTextField" fx:id="usernameField" layoutX="225.0" layoutY="123.0" GridPane.columnIndex="1"/>
-            <Label id="passwordLabel" layoutX="162.0" layoutY="169.0" text="Password"  />
-            <PasswordField id="passwordField" fx:id="passwordField" layoutX="225.0" layoutY="169.0" GridPane.columnIndex="1"/>
-            <Button id="loginButton" fx:id="loginButton" layoutX="251.0" layoutY="237.0" mnemonicParsing="false" text="Login" onAction="#handleLogin" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-background-color: #1a73e8; -fx-text-fill: #fff; -fx-font-size: 16px; -fx-padding: 12px 24px; -fx-border-radius: 24px; -fx-cursor: hand; -fx-font-family: 'Roboto', sans-serif; -fx-font-weight: bold;"/>
+            <TextField id="usernameTextField" fx:id="usernameField" layoutX="225.0" layoutY="123.0" GridPane.columnIndex="1" />
+            <Label id="passwordLabel" layoutX="162.0" layoutY="169.0" text="Password" />
+            <PasswordField id="passwordField" fx:id="passwordField" layoutX="225.0" layoutY="169.0" GridPane.columnIndex="1" />
+            <Button id="loginButton" fx:id="loginButton" layoutX="251.0" layoutY="237.0" mnemonicParsing="false" onAction="#handleLogin" style="-fx-background-color: #1a73e8; -fx-text-fill: #fff; -fx-font-size: 16px; -fx-padding: 12px 24px; -fx-border-radius: 24px; -fx-cursor: hand; -fx-font-family: 'Roboto', sans-serif; -fx-font-weight: bold;" text="Login" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <ProgressIndicator fx:id="progressIndicator" layoutX="274.0" layoutY="148.0" scaleX="2.0" scaleY="2.0" visible="false" />
         </children>
         <padding>
-            <Insets top="20" right="20" bottom="20" left="20"/>
+            <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
     </AnchorPane>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints />
+   </rowConstraints>
 </GridPane>

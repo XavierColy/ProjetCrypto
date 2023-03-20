@@ -3,6 +3,7 @@ package com.example.projetcrypto.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -17,6 +18,7 @@ import static com.example.projetcrypto.utils.Config.setEmailSession;
 
 public class LoginController extends TransitionController {
 
+    public ProgressIndicator progressIndicator;
     @FXML
     private AnchorPane anchorPane;
 
@@ -29,6 +31,9 @@ public class LoginController extends TransitionController {
 
     @FXML
     private void handleLogin() {
+        // Disable the window
+        anchorPane.setDisable(true);
+        progressIndicator.setVisible(true);
         // Get the email and password entered by the user
         String email = usernameField != null ? usernameField.getText() : null;
         String password = passwordField != null ? passwordField.getText() : null;
@@ -39,6 +44,7 @@ public class LoginController extends TransitionController {
             errorAlert.setHeaderText("Invalid Login");
             errorAlert.setContentText("Please enter your email and password.");
             errorAlert.showAndWait();
+            anchorPane.setDisable(false);
             return;
         }
 
@@ -59,13 +65,19 @@ public class LoginController extends TransitionController {
             errorAlert.setHeaderText("Login Failed");
             errorAlert.setContentText("The email address or password you entered is incorrect. Please try again.");
             errorAlert.showAndWait();
+            progressIndicator.setVisible(false);
+            anchorPane.setDisable(false);
         } catch (MessagingException e) {
             // If there is any other error, show an error message
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setHeaderText("Login Error");
             errorAlert.setContentText("An error occurred while trying to log in. Please try again later.");
             errorAlert.showAndWait();
+            progressIndicator.setVisible(false);
+            anchorPane.setDisable(false);
         } catch (IOException e) {
+            progressIndicator.setVisible(false);
+            anchorPane.setDisable(false);
             throw new RuntimeException(e);
         }
     }
