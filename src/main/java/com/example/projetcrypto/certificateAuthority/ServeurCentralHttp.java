@@ -1,4 +1,4 @@
-package com.example.projetcrypto.ibescheme;
+package com.example.projetcrypto.certificateAuthority;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -7,6 +7,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.example.projetcrypto.ibescheme.PublicParameter;
 import com.example.projetcrypto.mail.ConfigClient;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
