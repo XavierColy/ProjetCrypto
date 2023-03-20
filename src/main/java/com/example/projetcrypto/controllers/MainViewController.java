@@ -107,32 +107,34 @@ public class MainViewController extends TransitionController {
     }*/
 
     private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue){
-        setButtonsAndMailZoneActivated(true);
+        if (newValue!=null){
+            setButtonsAndMailZoneActivated(true);
 
-        try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-            Folder folder = store.getFolder(newValue.getFolderName());
-            folder.open(Folder.READ_WRITE);
-            Message[] messages = folder.search(new MessageIDTerm(newValue.getId()));
-            Message foundMessage = messages[0];
-            this.selectedEmail = newValue;
+            try {
+                Store store = getEmailSession().getStore("imaps");
+                store.connect();
+                Folder folder = store.getFolder(newValue.getFolderName());
+                folder.open(Folder.READ_WRITE);
+                Message[] messages = folder.search(new MessageIDTerm(newValue.getId()));
+                Message foundMessage = messages[0];
+                this.selectedEmail = newValue;
 
-            //Set subject
-            subjectField.setText(foundMessage.getSubject());
+                //Set subject
+                subjectField.setText(foundMessage.getSubject());
 
-            //Set Sender
-            senderField.setText(foundMessage.getFrom()[0].toString());
+                //Set Sender
+                senderField.setText(foundMessage.getFrom()[0].toString());
 
-            //todo display attachments
+                //todo display attachments
 
-            //Set Content
-            textArea.setText(foundMessage.getContent().toString());
+                //Set Content
+                textArea.setText(foundMessage.getContent().toString());
 
-            folder.close(true);
-            store.close();
-        } catch (MessagingException | IOException e) {
-            throw new RuntimeException(e);
+                folder.close(true);
+                store.close();
+            } catch (MessagingException | IOException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
