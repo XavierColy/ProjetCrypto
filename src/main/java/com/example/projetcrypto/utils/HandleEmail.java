@@ -13,6 +13,7 @@ import javax.mail.search.MessageIDTerm;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -98,6 +99,8 @@ public class HandleEmail {
             for (Message m : messages) {
                 emailModels.add(new EmailModel(m));
             }
+            Collections.reverse(emailModels);
+
             ObservableList<EmailModel> obsList = FXCollections.observableList(emailModels);
 
             folder.close(false);
