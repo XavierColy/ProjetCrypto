@@ -15,14 +15,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
 import static com.example.projetcrypto.utils.Config.getSessionOwner;
 
-/**
- * @author Kaoutar
- */
+
 public class HandleEmail {
 
     //region send
@@ -45,7 +42,6 @@ public class HandleEmail {
             e.printStackTrace();
         }
     }
-
 
 
     /**
@@ -88,14 +84,14 @@ public class HandleEmail {
     //endregion
 
     public static ObservableList<EmailModel> getEmailsByFolder(String folderName) {
-        try{
+        try {
             Store store = getEmailSession().getStore("imaps");
             store.connect();
             Folder folder = store.getFolder(folderName);
             folder.open(Folder.READ_ONLY);
 
             Message[] messages = folder.getMessages();
-            List<EmailModel> emailModels= new ArrayList<>();
+            List<EmailModel> emailModels = new ArrayList<>();
             for (Message m : messages) {
                 emailModels.add(new EmailModel(m));
             }
@@ -173,7 +169,7 @@ public class HandleEmail {
         }
     }
 
-    public static void reply(String messageID,String text){
+    public static void reply(String messageID, String text) {
         try {
             Store store = getEmailSession().getStore("imaps");
             store.connect();
@@ -184,14 +180,11 @@ public class HandleEmail {
             Message[] messages = inbox.getMessages();
             for (Message message : messages) {
                 if (message.getHeader("Message-ID")[0].equals(messageID)) {
-                    Scanner scanner = new Scanner(System.in);
-                    System.out.println("Do you want to reply to only the sender or everyone? (Enter 1 for Sender, 2 for Everyone)");
-                    int replyType = scanner.nextInt();
 
-                    MimeMessage reply = (MimeMessage) message.reply(replyType != 1);
+                    MimeMessage reply = (MimeMessage) message.reply(false);
                     reply.setText(text);
                     reply.setSubject("RE: " + message.getSubject());
-                    reply.setFrom(new InternetAddress(inbox.getFullName()));
+                    reply.setFrom(new InternetAddress(getSessionOwner()));
                     Transport.send(reply);
                     break;
                 }
@@ -204,4 +197,47 @@ public class HandleEmail {
         }
     }
 
+    public static void reply(String messageID, String text, String[] attachmentPaths) {
+        try {
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+
+            Folder inbox = store.getFolder("INBOX");
+            inbox.open(Folder.READ_ONLY);
+
+            Message[] messages = inbox.getMessages();
+            for (Message message : messages) {
+                if (message.getHeader("Message-ID")[0].equals(messageID)) {
+
+                    MimeMessage reply = (MimeMessage) message.reply(false);
+                    Multipart emailContent = new MimeMultipart();
+
+                    MimeBodyPart bodypart = new MimeBodyPart();
+                    bodypart.setText(text);
+
+                    reply.setSubject("RE: " + message.getSubject());
+                    reply.setFrom(new InternetAddress(getSessionOwner()));
+
+                    emailContent.addBodyPart(bodypart);
+
+                    // Add attachments
+                    for (String attachmentPath : attachmentPaths) {
+                        MimeBodyPart attachmentPart = new MimeBodyPart();
+                        attachmentPart.attachFile(new File(attachmentPath));
+                        emailContent.addBodyPart(attachmentPart);
+                    }
+
+                    reply.setContent(emailContent);
+
+                    Transport.send(reply);
+                    break;
+                }
+            }
+
+            inbox.close(false);
+            store.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

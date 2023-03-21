@@ -58,7 +58,8 @@ public class NewMessageController {
             if (this.emailModel!=null && subject.startsWith("RE: ")) HandleEmail.reply(this.emailModel.getId(),message);
             else HandleEmail.sendMail(recipient, subject, message, cc);
         } else {
-            HandleEmail.sendMail(recipient, subject, message, attachmentPaths, cc);
+            if (this.emailModel!=null && subject.startsWith("RE: ")) HandleEmail.reply(this.emailModel.getId(),message, attachmentPaths);
+            else HandleEmail.sendMail(recipient, subject, message, attachmentPaths, cc);
         }
 
         this.emailModel=null;
