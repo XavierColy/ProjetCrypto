@@ -1,15 +1,20 @@
 package com.example.projetcrypto.controllers;
 
 import com.example.projetcrypto.bo.EmailModel;
+import com.example.projetcrypto.utils.DataTypeEnum;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import javax.mail.*;
 import javax.mail.search.MessageIDTerm;
 import java.io.IOException;
+import java.util.Objects;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
 import static com.example.projetcrypto.utils.HandleEmail.*;
@@ -24,7 +29,6 @@ public class MainViewController extends TransitionController {
     public Button receptionButton;
     public Button sentMessagesButton;
     public Button draftMessagesButton;
-    public Button spamMessagesButton;
     public Button trashButton;
     public SplitPane emailSplitPane;
     public TextField subjectField;
@@ -32,8 +36,6 @@ public class MainViewController extends TransitionController {
     public TextField attachmentsDisplayField;
     public Button downloadAttachmentsButton;
     public TextArea textArea;
-    @FXML
-    private Label mailContentLabel;
     private EmailModel selectedEmail;
 
 
@@ -99,12 +101,21 @@ public class MainViewController extends TransitionController {
     }
 
 
-   /* public void forward(){
-        forwardMail(String messageID, String forwardTo);
+    public void replyAndForward()  {
+        try {
+            Stage s = new Stage();
+            FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("../fxml/newMessageWindow.fxml")));
+            Pane p = loader.load();
+            NewMessageController newMessageController = loader.getController();
+            newMessageController.setData(this.selectedEmail, DataTypeEnum.REPLY);
+            s.setScene(new Scene(p));
+            s.show();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
-    public void replyto(){
-        reply(String messageID,String text);
-    }*/
+
 
     private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue){
         if (newValue!=null){

@@ -27,6 +27,14 @@ public class EmailModel {
         return folderName;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
     @Override
     public String toString() {
         return this.sender + "\n" +

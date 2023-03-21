@@ -1,5 +1,7 @@
 package com.example.projetcrypto.controllers;
 
+import com.example.projetcrypto.bo.EmailModel;
+import com.example.projetcrypto.utils.DataTypeEnum;
 import com.example.projetcrypto.utils.HandleEmail;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -26,6 +28,8 @@ public class NewMessageController {
     public Button joinAttachmentsButton;
     public TextField attachmentsField;
     public TextArea messageField;
+
+    private EmailModel emailModel;
     //endregion
 
     //region methods
@@ -50,10 +54,14 @@ public class NewMessageController {
 
         String[] attachmentPaths = attachmentPath.split(";");
         if (attachmentPaths.length == 1 && attachmentPaths[0].isEmpty()) {
-            HandleEmail.sendMail(recipient, subject, message, cc);
+            if (this.emailModel!=null && subject.startsWith("FW: ")) HandleEmail.forwardMail(this.emailModel.getId(),recipient);
+            if (this.emailModel!=null && subject.startsWith("RE: ")) HandleEmail.reply(this.emailModel.getId(),message);
+            else HandleEmail.sendMail(recipient, subject, message, cc);
         } else {
             HandleEmail.sendMail(recipient, subject, message, attachmentPaths, cc);
         }
+
+        this.emailModel=null;
 
         Stage stage = (Stage) sendButton.getScene().getWindow();
         stage.close(); // Close the window
@@ -70,6 +78,19 @@ public class NewMessageController {
         cancelButton.setOnAction(event -> cancel());
         joinAttachmentsButton.setOnAction(event -> addAttachments());
         sendButton.setOnAction(event -> sendMail());
+    }
+
+    /**Sets the data for mail forward and replies
+     *
+     * @param type It can be "R" for replies or */
+    public void setData(EmailModel email, DataTypeEnum type){
+        this.emailModel=email;
+
+        messageField.setText(email.getText());
+
+        if(type == DataTypeEnum.FORWARD) subjectField.setText("FW: "+email.getSubject());
+        else subjectField.setText("RE: "+email.getSubject());
+
     }
 
 
