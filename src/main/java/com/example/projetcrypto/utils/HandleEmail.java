@@ -1,6 +1,10 @@
 package com.example.projetcrypto.utils;
 
 import com.example.projetcrypto.bo.EmailModel;
+import com.example.projetcrypto.controllers.LoginController;
+import com.example.projetcrypto.ibescheme.PublicParameter;
+import com.example.projetcrypto.mail.Client;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -72,8 +76,15 @@ public class HandleEmail {
 
             // Add attachments
             for (String attachmentPath : attachmentPaths) {
-                MimeBodyPart attachmentPart = new MimeBodyPart();
-                attachmentPart.attachFile(new File(attachmentPath));
+            	//chiffrement et envoi
+            	PublicParameter PP = LoginController.clientHttps.getConfigClient().getPP();
+            	String userId = LoginController.clientHttps.getUsername();
+            	Client.chiffrerPieceJointe(attachmentPath, userId, PP);
+            	String newAttachmentPath = attachmentPath+".encrypt";
+                
+            	//
+            	MimeBodyPart attachmentPart = new MimeBodyPart();
+                attachmentPart.attachFile(new File(newAttachmentPath));
                 emailContent.addBodyPart(attachmentPart);
             }
 
