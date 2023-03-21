@@ -85,7 +85,7 @@ public class UtilsForEncryptSystem {
 	 * @return le message initialement chiffré disposer dans une liste
 	 */
 	public static ArrayList<byte[]> decrypt(EncryptResult c,Pairing pairing, Element secretKey) {
-		Element couplage = pairing.pairing(secretKey,c.getElement1cyphertext());
+		Element couplage = pairing.pairing(secretKey,pairing.getG1().newElementFromBytes(c.getElement1cyphertext()));
 		byte[] resultH2 = PublicParameter.hash2(couplage);
 		int taille =resultH2.length;
 	
@@ -126,7 +126,7 @@ public class UtilsForEncryptSystem {
 	
 	/**
 	 * 
-	 * @param le chemin et le nom du fichier
+	 * @param filename le chemin et le nom du fichier
 	 * @return l'extension d'un fichier
 	 */
 	public static String getFileExtension(String filename) {
