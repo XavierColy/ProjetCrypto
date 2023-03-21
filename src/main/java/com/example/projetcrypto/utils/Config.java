@@ -1,7 +1,6 @@
 package com.example.projetcrypto.utils;
 
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
+import javax.mail.*;
 import java.util.Properties;
 
 public class Config {
@@ -9,11 +8,13 @@ public class Config {
 
     private static String sessionOwner;
 
+    private static Store store;
+
     public static Session getEmailSession(){
         return Config.emailSession;
     }
 
-    public static void setEmailSession(String email, String passwd){
+    public static void setEmailSession(String email, String passwd) throws MessagingException {
         Properties properties = new Properties();
 
         //configure smtp
@@ -39,5 +40,13 @@ public class Config {
 
     public static String getSessionOwner() {
         return sessionOwner;
+    }
+
+    public static Store getStore() {
+        return store;
+    }
+
+    public static void setStore(Store store) {
+        Config.store = store;
     }
 }

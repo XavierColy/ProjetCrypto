@@ -4,7 +4,6 @@ import com.example.projetcrypto.bo.EmailModel;
 import com.example.projetcrypto.ibescheme.PublicParameter;
 import com.example.projetcrypto.mail.Client;
 import com.example.projetcrypto.utils.DataTypeEnum;
-
 import it.unisa.dia.gas.jpbc.Element;
 import it.unisa.dia.gas.jpbc.Pairing;
 import it.unisa.dia.gas.plaf.jpbc.pairing.PairingFactory;
@@ -30,7 +29,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 
-import static com.example.projetcrypto.utils.Config.getEmailSession;
+import static com.example.projetcrypto.utils.Config.getStore;
 import static com.example.projetcrypto.utils.HandleEmail.deleteMail;
 import static com.example.projetcrypto.utils.HandleEmail.getEmailsByFolder;
 
@@ -113,15 +112,12 @@ public class MainViewController extends TransitionController {
 
     public void deleteEmail() {
         try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-            Folder folder = store.getFolder(this.selectedEmail.getFolderName());
+            Folder folder = getStore().getFolder(this.selectedEmail.getFolderName());
             folder.open(Folder.READ_WRITE);
             Message[] messages = folder.search(new MessageIDTerm(this.selectedEmail.getId()));
             Message foundMessage = messages[0];
             deleteMail(foundMessage.getHeader("Message-ID")[0], this.selectedEmail.getFolderName());
             folder.close(true);
-            store.close();
             displayInbox();
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -208,9 +204,7 @@ public class MainViewController extends TransitionController {
             setButtonsAndMailZoneActivated(true);
 
             try {
-                Store store = getEmailSession().getStore("imaps");
-                store.connect();
-                Folder folder = store.getFolder(newValue.getFolderName());
+                Folder folder = getStore().getFolder(newValue.getFolderName());
                 folder.open(Folder.READ_WRITE);
                 Message[] messages = folder.search(new MessageIDTerm(newValue.getId()));
                 Message foundMessage = messages[0];
