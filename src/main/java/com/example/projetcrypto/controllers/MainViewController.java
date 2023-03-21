@@ -12,21 +12,21 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.io.FilenameUtils;
+
 import javax.mail.*;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.search.MessageIDTerm;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Objects;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Objects;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
-import static com.example.projetcrypto.utils.HandleEmail.*;
+import static com.example.projetcrypto.utils.HandleEmail.deleteMail;
+import static com.example.projetcrypto.utils.HandleEmail.getEmailsByFolder;
 
 public class MainViewController extends TransitionController {
     @FXML
@@ -37,7 +37,6 @@ public class MainViewController extends TransitionController {
     public ListView<EmailModel> mailList;
     public Button receptionButton;
     public Button sentMessagesButton;
-    public Button draftMessagesButton;
     public Button trashButton;
     public SplitPane emailSplitPane;
     public TextField subjectField;
@@ -52,9 +51,9 @@ public class MainViewController extends TransitionController {
     @FXML
     private void initialize() {
         if (mailList == null) {
-            mailList = new ListView<EmailModel>();
+            mailList = new ListView<>();
         }
-        mailList.setItems(getEmailsByFolder("INBOX") );
+        mailList.setItems(getEmailsByFolder("INBOX"));
 
         // Only allowed to select single row in the ListView.
         mailList.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
@@ -76,10 +75,11 @@ public class MainViewController extends TransitionController {
         this.selectedEmail = null;
 
         if (mailList == null) {
-            mailList = new ListView<EmailModel>();
+            mailList = new ListView<>();
         }
-        mailList.setItems(getEmailsByFolder("INBOX") );
+        mailList.setItems(getEmailsByFolder("INBOX"));
     }
+
     @FXML
     public void showSentMails() {
         setButtonsAndMailZoneActivated(false);
@@ -87,10 +87,11 @@ public class MainViewController extends TransitionController {
         this.selectedEmail = null;
 
         if (mailList == null) {
-            mailList = new ListView<EmailModel>();
+            mailList = new ListView<>();
         }
         mailList.setItems(getEmailsByFolder("Sent"));
     }
+
     @FXML
     public void Corbeille() {
         setButtonsAndMailZoneActivated(false);
@@ -122,7 +123,7 @@ public class MainViewController extends TransitionController {
     }
 
 
-    private void replyAndForward(DataTypeEnum type)  {
+    private void replyAndForward(DataTypeEnum type) {
         try {
             Stage s = new Stage();
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("../fxml/newMessageWindow.fxml")));
@@ -135,11 +136,12 @@ public class MainViewController extends TransitionController {
             throw new RuntimeException(e);
         }
     }
-    public void replyto()  {
+
+    public void replyto() {
         replyAndForward(DataTypeEnum.REPLY);
     }
 
-    public  void forwardto() {
+    public void forwardto() {
         replyAndForward(DataTypeEnum.FORWARD);
     }
 
@@ -169,8 +171,6 @@ public class MainViewController extends TransitionController {
     }
 
 
-
-
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -178,6 +178,7 @@ public class MainViewController extends TransitionController {
         alert.setContentText(message);
         alert.showAndWait();
     }
+
     private boolean isAttachmentAccessible(BodyPart bodyPart) {
         try {
             InputStream is = bodyPart.getInputStream();
@@ -192,8 +193,8 @@ public class MainViewController extends TransitionController {
     }
 
     @FXML
-    private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue){
-        if (newValue!=null){
+    private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue) {
+        if (newValue != null) {
             setButtonsAndMailZoneActivated(true);
 
             try {
@@ -279,16 +280,13 @@ public class MainViewController extends TransitionController {
                 }
 
 
-
-
-
             } catch (Exception ex) {
                 showAlert("Error", "Failed to retrieve email content: " + ex.getMessage());
             }
         }
     }
 
-    private void setButtonsAndMailZoneActivated(boolean state){
+    private void setButtonsAndMailZoneActivated(boolean state) {
         //Set the zone visible
         emailSplitPane.setVisible(state);
 
