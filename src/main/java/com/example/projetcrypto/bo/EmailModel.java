@@ -1,8 +1,10 @@
 package com.example.projetcrypto.bo;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
+import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmailModel {
     private final String id;
@@ -10,6 +12,7 @@ public class EmailModel {
     private final String subject;
     private final String text;
     private final String folderName;
+    private final List<MimeBodyPart> attachments;
     private final String from;
 
     public EmailModel(Message message) throws MessagingException, IOException {
@@ -18,7 +21,28 @@ public class EmailModel {
         this.sender = message.getFrom()[0].toString();
         this.text = message.getContent().toString();
         this.folderName = message.getFolder().getFullName();
+        this.attachments = getAttachments(message);
         this.from = message.getFrom()[0].toString();
+    }
+
+    private List<MimeBodyPart> getAttachments(Message message) throws MessagingException, IOException {
+        List<MimeBodyPart> attachments = new ArrayList<>();
+        Object content = message.getContent();
+        if (content instanceof MimeBodyPart) {
+            MimeBodyPart mimeBodyPart = (MimeBodyPart) content;
+            if (Part.ATTACHMENT.equalsIgnoreCase(mimeBodyPart.getDisposition())) {
+                attachments.add(mimeBodyPart);
+            }
+        } else if (content instanceof Multipart) {
+            Multipart multipart = (Multipart) content;
+            for (int i = 0; i < multipart.getCount(); i++) {
+                BodyPart bodyPart = multipart.getBodyPart(i);
+                if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
+                    attachments.add((MimeBodyPart) bodyPart);
+                }
+            }
+        }
+        return attachments;
     }
 
     public String getId() {
@@ -39,6 +63,10 @@ public class EmailModel {
 
     public String getSubject() {
         return subject;
+    }
+
+    public List<MimeBodyPart> getAttachments() {
+        return attachments;
     }
 
     @Override

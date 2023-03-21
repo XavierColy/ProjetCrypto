@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
 import static com.example.projetcrypto.utils.Config.getSessionOwner;
@@ -42,6 +45,7 @@ public class HandleEmail {
             e.printStackTrace();
         }
     }
+
 
 
     /**
@@ -118,19 +122,23 @@ public class HandleEmail {
 
             Message[] messages = folder.search(new MessageIDTerm(messageID));
             if (messages.length == 0) {
-                System.out.println("No messages found with the specified ID.");
+                Alert alert = new Alert(Alert.AlertType.WARNING, "No messages found with the specified ID.", ButtonType.OK);
+                alert.showAndWait();
                 return;
             }
 
             for (Message message : messages) {
                 message.setFlag(Flags.Flag.DELETED, true);
-                System.out.println("Message deleted successfully.");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Message deleted successfully.", ButtonType.OK);
+                alert.showAndWait();
             }
 
             folder.close(true);
             store.close();
 
         } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "An error occurred while deleting the message: " + e.getMessage(), ButtonType.OK);
+            alert.showAndWait();
             e.printStackTrace();
         }
     }

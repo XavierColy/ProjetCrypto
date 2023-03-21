@@ -9,12 +9,21 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
+import org.apache.commons.io.FilenameUtils;
 import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.search.MessageIDTerm;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import static com.example.projetcrypto.utils.Config.getEmailSession;
 import static com.example.projetcrypto.utils.HandleEmail.*;
@@ -33,8 +42,9 @@ public class MainViewController extends TransitionController {
     public SplitPane emailSplitPane;
     public TextField subjectField;
     public TextField senderField;
-    public TextField attachmentsDisplayField;
-    public Button downloadAttachmentsButton;
+    @FXML
+    public ListView<String> attachmentListView;
+
     public TextArea textArea;
     private EmailModel selectedEmail;
 
@@ -81,6 +91,17 @@ public class MainViewController extends TransitionController {
         }
         mailList.setItems(getEmailsByFolder("Sent"));
     }
+    @FXML
+    public void Corbeille() {
+        setButtonsAndMailZoneActivated(false);
+
+        this.selectedEmail = null;
+
+        if (mailList == null) {
+            mailList = new ListView<EmailModel>();
+        }
+        mailList.setItems(getEmailsByFolder("Deleted Items"));
+    }
 
 
     public void deleteEmail() {
@@ -122,9 +143,55 @@ public class MainViewController extends TransitionController {
         replyAndForward(DataTypeEnum.FORWARD);
     }
 
+    private Path chooseSaveFilePath(String fileName) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Attachment");
+        fileChooser.setInitialFileName(fileName);
+
+        // Set file extension filter to restrict the file types that can be saved
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(
+                "Allowed file types", "*." + FilenameUtils.getExtension(fileName));
+        fileChooser.getExtensionFilters().add(extensionFilter);
+
+        File file = fileChooser.showSaveDialog(null);
+        if (file != null) {
+            // Ensure that the file extension matches the original attachment
+            String extension = FilenameUtils.getExtension(file.getName());
+            if (!extension.equalsIgnoreCase(FilenameUtils.getExtension(fileName))) {
+                String newFileName = FilenameUtils.getBaseName(file.getName()) + "." +
+                        FilenameUtils.getExtension(fileName);
+                file = new File(file.getParent(), newFileName);
+            }
+            return file.toPath();
+        } else {
+            return null;
+        }
+    }
 
 
 
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    private boolean isAttachmentAccessible(BodyPart bodyPart) {
+        try {
+            InputStream is = bodyPart.getInputStream();
+            byte[] buffer = new byte[1024];
+            while (is.read(buffer) > 0) {
+                // read and do nothing
+            }
+            return true;
+        } catch (IOException | MessagingException ex) {
+            return false;
+        }
+    }
+
+    @FXML
     private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue){
         if (newValue!=null){
             setButtonsAndMailZoneActivated(true);
@@ -144,15 +211,79 @@ public class MainViewController extends TransitionController {
                 //Set Sender
                 senderField.setText(foundMessage.getFrom()[0].toString());
 
-                //todo display attachments
+                // Display attachments
+                Object content = foundMessage.getContent();
+                if (content instanceof Multipart) {
+                    Multipart multipart = (Multipart) content;
 
-                //Set Content
-                textArea.setText(foundMessage.getContent().toString());
+                    // Clear the attachmentListView to remove any previous attachments
+                    attachmentListView.getItems().clear();
 
-                folder.close(true);
-                store.close();
-            } catch (MessagingException | IOException e) {
-                throw new RuntimeException(e);
+                    for (int i = 0; i < multipart.getCount(); i++) {
+                        BodyPart bodyPart = multipart.getBodyPart(i);
+
+                        // Check if the part is an attachment
+                        if (Part.ATTACHMENT.equalsIgnoreCase(bodyPart.getDisposition())) {
+
+                            // Get the attachment file name
+                            String fileName = bodyPart.getFileName();
+
+                            // Add the attachment file name to the attachmentListView
+                            attachmentListView.getItems().add(fileName);
+
+                            // Set a listener to download the selected attachment when it's clicked
+                            attachmentListView.setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    try {
+                                        Object selectedItem = attachmentListView.getSelectionModel().getSelectedItem();
+                                        if (selectedItem instanceof String) {
+                                            String selectedFileName = (String) selectedItem;
+
+                                            // Find the BodyPart that corresponds to the selected attachment
+                                            BodyPart selectedBodyPart = null;
+                                            for (int j = 0; j < multipart.getCount(); j++) {
+                                                BodyPart bp = multipart.getBodyPart(j);
+                                                if (Part.ATTACHMENT.equalsIgnoreCase(bp.getDisposition()) &&
+                                                        selectedFileName.equalsIgnoreCase(bp.getFileName())) {
+                                                    selectedBodyPart = bp;
+                                                    break;
+                                                }
+                                            }
+
+                                            // Download the selected attachment
+                                            if (selectedBodyPart != null) {
+                                                InputStream is = selectedBodyPart.getInputStream();
+                                                Path saveFilePath = chooseSaveFilePath(selectedFileName);
+                                                if (saveFilePath != null) {
+                                                    Files.copy(is, saveFilePath, StandardCopyOption.REPLACE_EXISTING);
+                                                    showAlert("Download Complete", "Attachment downloaded successfully");
+                                                }
+                                            }
+                                        }
+                                    } catch (IOException | MessagingException ex) {
+                                        String errorMsg = "Failed to download attachment: " + ex.getMessage();
+                                        if (ex instanceof FileNotFoundException) {
+                                            errorMsg += "\nAttachment file not found.";
+                                        } else if (ex instanceof IOException) {
+                                            errorMsg += "\nError accessing attachment file.";
+                                        } else {
+                                            errorMsg += "\nAttachment is corrupted or inaccessible.";
+                                        }
+                                        showAlert("Error", errorMsg);
+                                    }
+                                }
+                            });
+
+                        }
+                    }
+                }
+
+
+
+
+
+            } catch (Exception ex) {
+                showAlert("Error", "Failed to retrieve email content: " + ex.getMessage());
             }
         }
     }

@@ -39,7 +39,7 @@
                      <children>
                         <Button fx:id="receptionButton" mnemonicParsing="false" onAction="#displayInbox" prefWidth="160.0" text="Réception" />
                         <Button fx:id="sentMessagesButton" layoutX="10.0" layoutY="140.0" mnemonicParsing="false" onAction="#showSentMails" prefWidth="160.0" text="Envoyés" />
-                        <Button fx:id="draftMessagesButton" layoutX="10.0" layoutY="166.0" mnemonicParsing="false" prefWidth="160.0" text="Brouillons" />
+                        <Button fx:id="DeletedMessagesButton" layoutX="10.0" layoutY="166.0" mnemonicParsing="false" prefWidth="160.0" text="Corbeille" onAction="#Corbeille"/>
 
                      </children>
                   </VBox>
@@ -77,10 +77,9 @@
                                                    </font>
                                                 </TextField>
                                                 <TextField fx:id="senderField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                                                <TextField fx:id="attachmentsDisplayField" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                                <ListView fx:id="attachmentListView" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                 <Label text="Expéditeur : " GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                                                <Button fx:id="downloadAttachmentsButton" mnemonicParsing="false" text="Télécharger" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                                             </children>
+                                                </children>
                                           </GridPane>
                                        </children>
                                     </AnchorPane>
