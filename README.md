@@ -1,7 +1,7 @@
 # Projet Crypto
 
 ## Description
-L’objectif de ce projetest de réaliser un client mail permettant d’envoyer et de recevoir des mails contenant des pièces jointes chiffrées avec l’algorithme de chiffrement à base d’identité.
+L’objectif de ce projet est de réaliser un client mail permettant d’envoyer et de recevoir des mails contenant des pièces jointes chiffrées avec l’algorithme de chiffrement à base d’identité.
 
 ## Installation
 Ajouter tous les jars se trouvant dans le dossier resources/jars (en excluant le dossier test) dans la structure du projet.
@@ -20,7 +20,7 @@ cette adresse dans la variable url du fichier controllers/LoginController.java. 
     
                 resultat
 
-où **example** est une fonction, **alpha** le paramètre principale à son entrée et sa sortie est **resultat**.
+où **example** est une fonction, avec **alpha** son paramètre principale en entrée, et la fonction **example** donne en sortie **resultat**.
 
 
 Dans le sens de l'envoi de message :
@@ -47,6 +47,6 @@ Dans le sens inverse :
 Consignes:
 
 * le resulat de *[produireFichierChiffrer]* est d'extension .encrypt (en plus de l'extension initiale du fichier)
-* le fichier recu par mail est stocker comme temporaire 
+* le fichier recu par mail est stocker comme temporaire (pour le moment est stocker)
 * Une fois le fichier recu, verifier si il contient l'extension .encrypt, le cas échéant : retirer l'extension et procéder à la suite. Sinon rendre le fichier definitif.
 * Une fois le fichier initilale retrouvée, le sauvegarder en definitif , supprimer le fichier temporaire.
