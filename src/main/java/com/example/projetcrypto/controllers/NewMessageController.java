@@ -81,16 +81,22 @@ public class NewMessageController {
         sendButton.setOnAction(event -> sendMail());
     }
 
-    /**Sets the data for mail forward and replies
-     *
-     * @param type It can be "R" for replies or */
+    /**Sets the data for mail forward and replies*/
     public void setData(EmailModel email, DataTypeEnum type){
         this.emailModel=email;
 
-        messageField.setText(email.getText());
+        messageField.setText("\n\n ----------------------------------------------\n\n"+email.getText());
 
-        if(type == DataTypeEnum.FORWARD) subjectField.setText("FW: "+email.getSubject());
-        else subjectField.setText("RE: "+email.getSubject());
+        if(type == DataTypeEnum.FORWARD) {
+            subjectField.setText("FW: " + email.getSubject());
+            subjectField.setEditable(false);
+        }
+        else {
+            subjectField.setText("RE: " + email.getSubject());
+            subjectField.setEditable(false);
+            recipientTextField.setText(email.getFrom());
+            recipientTextField.setEditable(false);
+        }
 
     }
 

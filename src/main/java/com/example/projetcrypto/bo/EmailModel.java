@@ -10,6 +10,7 @@ public class EmailModel {
     private final String subject;
     private final String text;
     private final String folderName;
+    private final String from;
 
     public EmailModel(Message message) throws MessagingException, IOException {
         this.id = message.getHeader("Message-ID")[0];
@@ -17,6 +18,7 @@ public class EmailModel {
         this.sender = message.getFrom()[0].toString();
         this.text = message.getContent().toString();
         this.folderName = message.getFolder().getFullName();
+        this.from = message.getFrom()[0].toString();
     }
 
     public String getId() {
@@ -29,6 +31,10 @@ public class EmailModel {
 
     public String getText() {
         return text;
+    }
+
+    public String getFrom() {
+        return from;
     }
 
     public String getSubject() {
