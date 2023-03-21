@@ -101,20 +101,28 @@ public class MainViewController extends TransitionController {
     }
 
 
-    public void replyAndForward()  {
+    private void replyAndForward(DataTypeEnum type)  {
         try {
             Stage s = new Stage();
             FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("../fxml/newMessageWindow.fxml")));
             Pane p = loader.load();
             NewMessageController newMessageController = loader.getController();
-            newMessageController.setData(this.selectedEmail, DataTypeEnum.REPLY);
+            newMessageController.setData(this.selectedEmail, type);
             s.setScene(new Scene(p));
             s.show();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
+    public void replyto()  {
+        replyAndForward(DataTypeEnum.REPLY);
+    }
+
+    public  void forwardto() {
+        replyAndForward(DataTypeEnum.FORWARD);
+    }
+
+
 
 
     private void onSelectionChange(ObservableValue<? extends EmailModel> observable, EmailModel oldValue, EmailModel newValue){
