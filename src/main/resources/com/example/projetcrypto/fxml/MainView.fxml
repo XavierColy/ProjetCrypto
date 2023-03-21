@@ -14,11 +14,11 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="replyButton" disable="true" mnemonicParsing="false" onAction="#replyAndForward" text="Répondre">
+            <Button fx:id="replyButton" disable="true" mnemonicParsing="false" onAction="#replyto" text="Répondre">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
-            <Button fx:id="forwardButton" disable="true" mnemonicParsing="false" onAction="#replyAndForward" text="Faire suivre">
+            <Button fx:id="forwardButton" disable="true" mnemonicParsing="false" onAction="#forwardto" text="Faire suivre">
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
