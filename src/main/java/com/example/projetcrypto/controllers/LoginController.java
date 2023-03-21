@@ -7,14 +7,20 @@ import javafx.stage.Stage;
 
 import javax.mail.AuthenticationFailedException;
 import javax.mail.MessagingException;
+import javax.mail.Store;
 import javax.mail.Transport;
+
+import com.example.projetcrypto.mail.Client;
+
 import java.io.IOException;
 
-import static com.example.projetcrypto.utils.Config.getEmailSession;
-import static com.example.projetcrypto.utils.Config.setEmailSession;
+import static com.example.projetcrypto.utils.Config.*;
 
 public class LoginController extends TransitionController {
-
+	
+	public static Client clientHttps;
+	public static String url = "http://127.0.1.1:8080/service";
+	
     public ProgressIndicator progressIndicator;
     public Button loginButton;
     @FXML
@@ -53,7 +59,15 @@ public class LoginController extends TransitionController {
             transport.connect();
             transport.close();
 
-            // If the connection is successful, navigate to next window
+            Store store = getEmailSession().getStore("imaps");
+            store.connect();
+
+            setStore(store);
+           
+            // If the connection is successful
+            // client et config
+    		clientHttps = new Client(email,Client.receptionConfig(email,url));
+    		// navigate to next window
             this.setPrevStage((Stage) anchorPane.getScene().getWindow());
             displayNextWindow("MainView.fxml", true);
 

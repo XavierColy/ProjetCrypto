@@ -1,8 +1,13 @@
 package com.example.projetcrypto.utils;
 
 import com.example.projetcrypto.bo.EmailModel;
+import com.example.projetcrypto.controllers.LoginController;
+import com.example.projetcrypto.ibescheme.PublicParameter;
+import com.example.projetcrypto.mail.Client;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -15,12 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 
-import static com.example.projetcrypto.utils.Config.getEmailSession;
-import static com.example.projetcrypto.utils.Config.getSessionOwner;
+import static com.example.projetcrypto.utils.Config.*;
 
 
 public class HandleEmail {
@@ -72,8 +73,15 @@ public class HandleEmail {
 
             // Add attachments
             for (String attachmentPath : attachmentPaths) {
-                MimeBodyPart attachmentPart = new MimeBodyPart();
-                attachmentPart.attachFile(new File(attachmentPath));
+            	//chiffrement et envoi
+            	PublicParameter PP = LoginController.clientHttps.getConfigClient().getPP();
+            	String userId = LoginController.clientHttps.getUsername();
+            	Client.chiffrerPieceJointe(attachmentPath, userId, PP);
+            	String newAttachmentPath = attachmentPath+".encrypt";
+                
+            	//
+            	MimeBodyPart attachmentPart = new MimeBodyPart();
+                attachmentPart.attachFile(new File(newAttachmentPath));
                 emailContent.addBodyPart(attachmentPart);
             }
 
@@ -89,9 +97,7 @@ public class HandleEmail {
 
     public static ObservableList<EmailModel> getEmailsByFolder(String folderName) {
         try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-            Folder folder = store.getFolder(folderName);
+            Folder folder = getStore().getFolder(folderName);
             folder.open(Folder.READ_ONLY);
 
             Message[] messages = folder.getMessages();
@@ -104,7 +110,6 @@ public class HandleEmail {
             ObservableList<EmailModel> obsList = FXCollections.observableList(emailModels);
 
             folder.close(false);
-            store.close();
             return obsList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,10 +119,7 @@ public class HandleEmail {
 
     public static void deleteMail(String messageID, String folderName) {
         try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-
-            Folder folder = store.getFolder(folderName);
+            Folder folder = getStore().getFolder(folderName);
             folder.open(Folder.READ_WRITE);
 
             Message[] messages = folder.search(new MessageIDTerm(messageID));
@@ -134,7 +136,6 @@ public class HandleEmail {
             }
 
             folder.close(true);
-            store.close();
 
         } catch (Exception e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "An error occurred while deleting the message: " + e.getMessage(), ButtonType.OK);
@@ -146,10 +147,7 @@ public class HandleEmail {
 
     public static void forwardMail(String messageID, String forwardTo) {
         try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-
-            Folder inbox = store.getFolder("INBOX");
+            Folder inbox = getStore().getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
             Message[] messages = inbox.getMessages();
             for (Message message : messages) {
@@ -169,7 +167,6 @@ public class HandleEmail {
             }
 
             inbox.close(false);
-            store.close();
         } catch (MessagingException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -179,10 +176,8 @@ public class HandleEmail {
 
     public static void reply(String messageID, String text) {
         try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
 
-            Folder inbox = store.getFolder("INBOX");
+            Folder inbox = getStore().getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
 
             Message[] messages = inbox.getMessages();
@@ -199,7 +194,6 @@ public class HandleEmail {
             }
 
             inbox.close(false);
-            store.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -207,10 +201,7 @@ public class HandleEmail {
 
     public static void reply(String messageID, String text, String[] attachmentPaths) {
         try {
-            Store store = getEmailSession().getStore("imaps");
-            store.connect();
-
-            Folder inbox = store.getFolder("INBOX");
+            Folder inbox = getStore().getFolder("INBOX");
             inbox.open(Folder.READ_ONLY);
 
             Message[] messages = inbox.getMessages();
@@ -243,7 +234,6 @@ public class HandleEmail {
             }
 
             inbox.close(false);
-            store.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
