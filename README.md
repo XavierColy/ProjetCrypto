@@ -1,3 +1,17 @@
+# Projet Crypto
+
+## Description
+L’objectif de ce projetest de réaliser un client mail permettant d’envoyer et de recevoir des mails contenant des pièces jointes chiffrées avec l’algorithme de chiffrement à base d’identité.
+
+## Installation
+Ajouter tous les jars se trouvant dans le dossier resources/jars (en excluant le dossier test) dans la structure du projet.
+Sur Intellij, aller dans File -> Project structure -> Libraries -> New project library (bouton +) et ajoutez tous les jars
+
+## Exécution
+Il faut d'abord exécuter le fichier certificateAuthority/ServeurCentralHttp.java pour lancer le serveur puis récupérer l'adresse IP de celui-ci dans le terminal d'exécution. Ensuite, il faut ajouter 
+cette adresse dans la variable url du fichier controllers/LoginController.java. Vous pouvez maintenant exécuter le fichier Main.java.
+
+
 ## Processus chiffrement, déchiffrement de pièce jointe(fichier texte et image)
 
 
